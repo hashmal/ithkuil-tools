@@ -14,10 +14,14 @@ function unstressCharacter(character: string): { character: string, stressed: bo
 // TODO: stress marks.
 export class IpaConverter {
   private text!: string
+  private options!: IpaConverterOptions
   private index = 0
 
-  constructor(text: string, private options?: IpaConverterOptions) {
+  private DEFAULT_OPTIONS: IpaConverterOptions = { stressMark: 'accent' }
+
+  constructor(text: string, options?: IpaConverterOptions) {
     this.text = text.toLowerCase()
+    this.options = { ...this.DEFAULT_OPTIONS, ...(options ?? {}) }
   }
 
   public romanizationToIpa(): string | undefined {
