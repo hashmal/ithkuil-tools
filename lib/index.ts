@@ -1,1 +1,1 @@
-console.log('Hello, world!')
+export { IpaConverter } from './ipa/IpaConverter'
