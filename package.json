@@ -9,14 +9,18 @@
   "type": "module",
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "lint": "eslint ./lib --ext .js,.ts"
+    "lint": "eslint ./lib --ext .js,.ts",
+    "test": "jest"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
     "@stylistic/eslint-plugin": "^4.0.1",
+    "@types/jest": "^29.5.14",
     "eslint": "^9.21.0",
     "eslint-plugin-regexp": "^2.7.0",
     "globals": "^16.0.0",
+    "jest": "^29.7.0",
+    "ts-node": "^10.9.2",
     "tsc": "^2.0.4",
     "tsx": "^4.19.3",
     "typescript": "^5.7.3",
