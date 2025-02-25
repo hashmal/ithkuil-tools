@@ -1,7 +1,7 @@
 {
   "name": "ithkuil-tools",
   "version": "0.0.1",
-  "description": "Ithkuil tools, starting with IPA generation",
+  "description": "A set of Ithkuil tools, starting with IPA generation",
   "main": "lib/index.ts",
   "author": "Jérémy Pinat <jeremypinat@bravebolt.com>",
   "license": "MIT",
