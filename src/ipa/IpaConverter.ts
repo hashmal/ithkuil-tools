@@ -3,7 +3,7 @@ import { STRESSED_VOWELS_STRING, VOWELS_STRING } from './phonology'
 import { IpaConversionError } from './IpaConversionError'
 
 export type IpaConverterOptions = {
-  stressMark?: 'accent' | 'none'
+  stressMarks?: 'accent' | 'none'
   brackets?: boolean
 }
 
@@ -22,7 +22,7 @@ export class IpaConverter {
 
   /** Default options for the converter, to be overwwritten with explicitly given options. */
   private DEFAULT_OPTIONS: IpaConverterOptions = {
-    stressMark: 'accent',
+    stressMarks: 'accent',
     brackets: true,
   }
 
@@ -62,7 +62,7 @@ export class IpaConverter {
 
       try {
         ipaAccumulator += this.matchCharacter(matcher!)
-        if (this.options?.stressMark === 'accent' && stressed) ipaAccumulator += STRESS_MARK_ACCENT
+        if (this.options?.stressMarks === 'accent' && stressed) ipaAccumulator += STRESS_MARK_ACCENT
       } catch (error) { if (error instanceof Error) return error }
     }
 

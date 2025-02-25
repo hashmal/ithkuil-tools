@@ -8,19 +8,19 @@ function ipa(text:string): string | IpaConversionError {
 }
 
 describe('IpaConverterOptions', () => {
-  describe('stressMark', () => {
+  describe('stressMarks', () => {
     it('returns the IPA string with stress diactrics if omitted', () => {
       const converter = new IpaConverter('á')
       expect(converter.textToIpa()).toBe('[á]')
     })
 
     it('returns the IPA string with stress diactrics if set to "accent"', () => {
-      const converter = new IpaConverter('á', { stressMark: 'accent' })
+      const converter = new IpaConverter('á', { stressMarks: 'accent' })
       expect(converter.textToIpa()).toBe('[á]')
     })
 
     it('returns the IPA string without stress diactrics if set to "none"', () => {
-      const converter = new IpaConverter('á', { stressMark: 'none' })
+      const converter = new IpaConverter('á', { stressMarks: 'none' })
       expect(converter.textToIpa()).toBe('[a]')
     })
   })
