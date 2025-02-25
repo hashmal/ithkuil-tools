@@ -1,8 +1,5 @@
-import { IpaConversionError } from 'ipa/IpaConversionError'
-import { IpaConverter, IpaConverterOptions } from './ipa/IpaConverter'
-
-export { IpaConverter } from './ipa/IpaConverter'
-export { IpaConversionError } from './ipa/IpaConversionError'
+import { IpaConversionError } from './IpaConversionError'
+import { IpaConverter, IpaConverterOptions } from './IpaConverter'
 
 /** Returns an IPA representation of a given romanized Ithkuil text.
  *
@@ -14,4 +11,3 @@ export function romanizedIthkuilToIpa(romanizedIthkuilText: string, options?: Ip
   const ipaConverter = new IpaConverter(romanizedIthkuilText, options)
   return ipaConverter.textToIpa()
 }
-
