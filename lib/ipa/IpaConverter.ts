@@ -3,6 +3,7 @@ import { STRESSED_VOWELS_STRING, VOWELS_STRING } from '../phonology'
 
 export type IpaConverterOptions = {
   stressMark?: 'accent' | 'none'
+  brackets?: boolean
 }
 
 function unstressCharacter(character: string): { character: string, stressed: boolean } {
@@ -27,7 +28,10 @@ export class IpaConverter {
   private options!: IpaConverterOptions
   private index = 0
 
-  private DEFAULT_OPTIONS: IpaConverterOptions = { stressMark: 'accent' }
+  private DEFAULT_OPTIONS: IpaConverterOptions = {
+    stressMark: 'accent',
+    brackets: true,
+  }
 
   constructor(text: string, options?: IpaConverterOptions) {
     this.text = preprocessText(text)
@@ -58,7 +62,11 @@ export class IpaConverter {
 
     const geminatedIpaAccumulator = this.geminate(ipaAccumulator)
 
-    return `[${geminatedIpaAccumulator}]`
+    if (this.options.brackets) {
+      return `[${geminatedIpaAccumulator}]`
+    } else {
+      return geminatedIpaAccumulator
+    }
   }
 
   private geminate(text: string): string {

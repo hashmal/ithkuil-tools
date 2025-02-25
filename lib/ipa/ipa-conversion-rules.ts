@@ -35,7 +35,7 @@ export const CONVERTION_RULES: {
 
   'i': (lb, la) => {
     if (beginingOfBivocalicConjunct(la)) return 'i' // [i] at the beginning of a bivocalic conjunct
-    if (lb(1) === 'y' || la(1)) return 'ɪ' // [ɪ] when preceded or followed by y
+    if (lb(1) === 'y' || la(1) === 'y') return 'ɪ' // [ɪ] when preceded or followed by y
     return 'i' // default value to fill a void in the documentation
   },
 
@@ -57,7 +57,7 @@ export const CONVERTION_RULES: {
   },
 
   'ü': (lb, _la) => {
-    if ('yw'.indexOf(lb(1)) >= 0) return 'ʉ' // [ʉ] when preceded by y or w
+    if ('yw'.indexOf(lb(1)) >= 0 && lb(1).length > 0) return 'ʉ' // [ʉ] when preceded by y or w
     return 'y' // [y] as in French lune
   },
 
