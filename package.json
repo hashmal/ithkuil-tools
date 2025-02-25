@@ -1,6 +1,6 @@
 {
   "name": "ithkuil-tools",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A set of Ithkuil tools, starting with IPA generation",
   "repository": "https://github.com/hashmal/ithkuil-tools.git",
   "author": "Jérémy Pinat <jeremypinat@bravebolt.com>",
