@@ -23,6 +23,8 @@ function followedByAConsonant(la: (n: number) => string): boolean {
 }
 
 /** Matchers to be used by `IpaConverter`
+ *
+ * @remarks Check the associated spec file for more information about the conversion rules.
  * @internal */
 export const CONVERTION_RULES: { [key: string]: IpaConverterMatcher } = {
 

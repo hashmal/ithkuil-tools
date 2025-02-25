@@ -1,4 +1,10 @@
+import { IpaConversionError, romanizedIthkuilToIpa } from '../../lib'
 import { IpaConverter } from '../../lib/ipa/IpaConverter'
+
+// Helper function to reduce verbosity.
+function ipa(text:string): string | IpaConversionError {
+  return romanizedIthkuilToIpa(text, { brackets: false })
+}
 
 describe('IpaConverterOptions', () => {
   describe('stressMark', () => {
@@ -32,6 +38,39 @@ describe('IpaConverterOptions', () => {
     it('returns the IPA string without brackets if set to "false"', () => {
       const converter = new IpaConverter('a', { brackets: false })
       expect(converter.textToIpa()).toBe('a')
+    })
+  })
+
+  describe('preprocessing', () => {
+    it('removes leading whitespace', () => {
+      expect(ipa(' a')).toBe('a')
+    })
+
+    it('removes trailing whitespace', () => {
+      expect(ipa('a ')).toBe('a')
+    })
+
+    it('removes multiple whitespace', () => {
+      expect(ipa('a  a')).toBe('a a')
+    })
+
+    it('converts to lowercase', () => {
+      expect(ipa('A')).toBe('a')
+    })
+
+    it('replaces apostrophes with glottal stops', () => {
+      expect(ipa("'")).toBe('Ɂ')
+    })
+
+    it('removes basic punctuation', () => {
+      expect(ipa(',')).toBe('')
+      expect(ipa('.')).toBe('')
+    })
+  })
+
+  describe('gemination', () => {
+    it('geminates consonants', () => {
+      expect(ipa('mm')).toBe('mː')
     })
   })
 })
