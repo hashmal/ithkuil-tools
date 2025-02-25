@@ -1,18 +1,31 @@
 import { CONSONANTS, Consonant, VOWELS, Vowel } from '../phonology'
 
+/** Matcher signature
+ * @internal */
+export type IpaConverterMatcher = (lb: (length: number) => string, la: (length: number) => string) => string | undefined
+
+/** Utility function to check if a character is followed by a vowel.
+ *
+ * @param la Lookahead function.
+ * @returns `true` if the character is followed by a vowel, `false` otherwise.
+ */
 function beginingOfBivocalicConjunct(la: (n: number) => string): boolean {
   return VOWELS.indexOf(la(1) as Vowel) >= 0
 }
 
+/** Utility function to check if a character is followed by a consonant.
+ *
+ * @param la Lookahead function.
+ * @returns `true` if the character is followed by a consonant, `false` otherwise.
+ */
 function followedByAConsonant(la: (n: number) => string): boolean {
   return CONSONANTS.indexOf(la(1) as Consonant) >= 0
 }
 
-// TODO: Implement stress mark as lines, accents, or none.
+/** Matchers to be used by `IpaConverter`
+ * @internal */
 export const CONVERTION_RULES: {
-  [key: string]: (
-    lb: (length: number) => string, la: (length: number) => string
-  ) => string | undefined
+  [key: string]: IpaConverterMatcher
 } = {
 
   // SPECIAL CHARACTERS
