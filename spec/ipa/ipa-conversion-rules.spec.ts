@@ -6,6 +6,22 @@ function ipa(text:string): string | IpaConversionError {
   return romanizedIthkuilToIpa(text, { brackets: false })
 }
 
+// SPECIAL CHARACTERS
+
+describe('" "', () => {
+  it('is is a space', () => {
+    expect(ipa('a a')).toEqual('a a')
+  })
+})
+
+describe('-', () => {
+  it('is is a hyphen: silent concatenation character', () => {
+    expect(ipa('-')).toEqual('-')
+  })
+})
+
+// VOWELS
+
 describe('a', () => {
   it('is pronounced [a] as in Spanish "alta"', () => {
     expect(ipa('a')).toEqual('a')
@@ -99,20 +115,66 @@ describe('ü', () => {
   })
 })
 
-// h is never silent and is pronounced [h] in all positions where it appears, even in word-final position. Syllable-initial or word-final -ph-, -th-, -kh-, -ch-, -čh- are pronounced as aspirated stops/affricates [pʰ, tʰ, kʰ, tsʰ, tʃʰ]but when between two vowels, they are disyllabic and pronounced as in English haphazard, at-hand, backhanded, it’s here and church hall; the combinations -hl-, -hr-, -hm- and -hn- may be pronounced as separate consonants or as the following single voiceless consonants: hl = [ɬ], hr = [ɾ̥], hm = [m̥], hn = [n̥]. Combinations of a voiced consonant plus following h are always dissyllabic, e.g., -bh-, -dh-, -gh-, -rh-, -mh-, -nh-, etc.
+// CONSONANTS
 
-// ʼ is the voiceless glottal stop [Ɂ] as heard between the two vowels of English oh-oh!, or between the first two e-sounds of German beendete, or the one possible realization of the zero phoneme in Mandarin 親愛 (qīnʼài [t͡ɕʰji̞n̚˥.ʔa̠ɪ̯˥˩], different from qīnài [t͡ɕʰi˥.na̠ɪ̯˥˩] or qīnnài [t͡ɕʰji̞n̚˥.na̠ɪ̯˥˩]); For the voiceless glottal stop in the syllable initial, cf. the distinctions in Hawaiian or some Ryukyuan languages; For the voiceless glottal stop in the syllable coda, cf. the distinctions in Wu or Min Chinese languages, as well as Japanese あっ (aQ, [äʔ]).
+describe('h', () => {
+  it('is pronounced [h] as in English "hand"', () => {
+    expect(ipa('h')).toEqual('h')
+  })
 
-// n is dental, not alveolar; n assimilates to velar [ŋ] before k, g, and x (but not before ř); therefore, phonemic ň is not permitted before k, g, or x in New Ithkuil native words.
+  it('is pronounced [ʰ] in word-final position after p, t, k, c, and č', () => {
+    expect(ipa('ph')).toEqual('pʰ')
+    expect(ipa('th')).toEqual('t̪ʰ')
+    expect(ipa('kh')).toEqual('kʰ')
+    expect(ipa('ch')).toEqual('tsʰ')
+    expect(ipa('čh')).toEqual('tʃʰ')
+  })
 
-// r is a single tap/flap [ɾ], which becomes a trill [r] when geminated, as in Spanish or Italian caro and carro; when followed by a consonant in the same word, it may be pronounced as an apico-alveolar approximant [ɹ], similar to (but further forward in the mouth than) the postalveolar [ɹ̱] of standard English. An example of an apico-alveolar approximant is the non-retroflex r sound in Mandarin.
+  it.todo('handle syllable-initial -ph-, -th-, -kh-, -ch-, -čh- to be pronounced as aspirated stops/affricates [pʰ, t̪ʰ, kʰ, tsʰ, tʃʰ], unless between two vowels')
+  it.todo('handle the possibility of single voiceless consonants: hl = [ɬ], hr = [ɾ̥], hm = [m̥], hn = [n̥]')
+})
 
-// ř is the voiced dorso-uvular approximant [ʁ] as in French rire or German Ruhr; when geminated it is either [ʁː] or can be strengthened to a uvular trill [ʀ]; care should be taken to ensure the pronunciations of -př- and -tř- are differentiated from -px- and -tx-.
+describe('ʼ', () => {
+  it('is pronounced [Ɂ] as in English "uh-oh"', () => {
+    expect(ipa('ʼ')).toEqual('Ɂ')
+  })
+})
+
+describe('n', () => {
+  it('is pronounced [n] as in French, Spanish, or Italian', () => {
+    expect(ipa('n')).toEqual('n')
+  })
+
+  it('assimilates to velar [ŋ] before k, g, and x', () => {
+    expect(ipa('nk')).toEqual('ŋk')
+    expect(ipa('ng')).toEqual('ŋg')
+    expect(ipa('nx')).toEqual('ŋx')
+  })
+})
+
+describe('r', () => {
+  it('is a single tap/flap [ɾ], which becomes a trill [r] when geminated', () => {
+    expect(ipa('r')).toEqual('ɾ')
+    expect(ipa('rr')).toEqual('ʀ')
+  })
+  it('is an apico-alveolar approximant [ɹ] when followed by a consonant in the same word', () => {
+    expect(ipa('rk')).toEqual('ɹk')
+  })
+})
+
+describe('ř', () => {
+  it('is the voiced dorso-uvular approximant [ʁ] as in French rire or German Ruhr', () => {
+    expect(ipa('ř')).toEqual('ʁ')
+  })
+  it('when geminated it is either [ʁː] or can be strengthened to a uvular trill [ʀ]', () => {
+    expect(ipa('řř')).toEqual('ʁː')
+  })
+})
 
 describe.each([
   ['p', 'p', 'as in French, Spanish, or Italian'],
   ['k', 'k', 'as in French, Spanish, or Italian'],
-  ['t', 't̪', 'as in French, Spanish, or Italian'],
+  ['t', 't̪', 'as in French, Spanish, or Italian'], // t
   ['d', 'd̪', 'as in French or Italian'],
   ['g', 'g', 'as in English "go"'],
   ['ţ', 'θ', 'as in English "this" or Castilian Spanish "caza"'],

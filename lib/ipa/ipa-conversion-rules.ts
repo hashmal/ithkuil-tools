@@ -24,54 +24,51 @@ function followedByAConsonant(la: (n: number) => string): boolean {
 
 /** Matchers to be used by `IpaConverter`
  * @internal */
-export const CONVERTION_RULES: {
-  [key: string]: IpaConverterMatcher
-} = {
+export const CONVERTION_RULES: { [key: string]: IpaConverterMatcher } = {
 
   // SPECIAL CHARACTERS
 
-  ' ': (_lb, _la) => (' '), // Space character
-  '-': (_lb, _la) => ('-'), // Silent, concatenation character
+  ' ': (_lb, _la) => (' '),
+  '-': (_lb, _la) => ('-'),
 
   // VOWELS
 
-  'a': (_lb, _la) => ('a'), // [a] as in "alta" (or [ɑ] as in "father")
+  'a': (_lb, _la) => ('a'),
 
-  'ä': (_lb, _la) => ('æ'), // [æ] as in American English "cat"
+  'ä': (_lb, _la) => ('æ'),
 
   'e': (_lb, la) => {
-    if (beginingOfBivocalicConjunct(la)) return ('e') // [e] at the beginning of a bivocalic conjunct
-    return 'ɛ' // [ɛ] as in English let
+    if (beginingOfBivocalicConjunct(la)) return 'e'
+    return 'ɛ'
   },
 
-  'ë': (_lb, _la) => ('ʌ'), // [ʌ] like the u in English "cut", or the “schwa” sound [ə] like the a in English sofa, (or as [ɤ] in Mandarin)
+  'ë': (_lb, _la) => ('ʌ'),
 
   'i': (lb, la) => {
-    if (beginingOfBivocalicConjunct(la)) return 'i' // [i] at the beginning of a bivocalic conjunct
-    if (lb(1) === 'y' || la(1) === 'y') return 'ɪ' // [ɪ] when preceded or followed by y
-    return 'i' // default value to fill a void in the documentation
+    if (beginingOfBivocalicConjunct(la)) return 'i'
+    if (lb(1) === 'y' || la(1) === 'y') return 'ɪ'
+    return 'i'
   },
 
   'o': (_lb, la) => {
-    if (beginingOfBivocalicConjunct(la)) return ('o') // [o] at the beginning of a bivocalic conjunct
-    return 'ɔ' // [ɔ] like the first o in Italian "otto"
+    if (beginingOfBivocalicConjunct(la)) return 'o'
+    return 'ɔ'
   },
 
   'ö': (_lb, la) => {
-    if (beginingOfBivocalicConjunct(la)) return ('ø') // [ø] at the beginning of a bivocalic conjunct
-    return 'œ' // [œ] as in French "neuf"
-    // return 'ø' // [ø] as in French "feu"
+    if (beginingOfBivocalicConjunct(la)) return 'ø'
+    return 'œ'
   },
 
   'u': (lb, la) => {
-    if (beginingOfBivocalicConjunct(la)) return 'u' // [u] at the beginning of a bivocalic conjunct
-    if (lb(1) === 'w' || la(1) === 'w') return 'ʊ' // [ʊ] when preceded or followed by w
-    return 'u' // default value to fill a void in the documentation
+    if (beginingOfBivocalicConjunct(la)) return 'u'
+    if (lb(1) === 'w' || la(1) === 'w') return 'ʊ'
+    return 'u'
   },
 
   'ü': (lb, _la) => {
-    if ('yw'.indexOf(lb(1)) >= 0 && lb(1).length > 0) return 'ʉ' // [ʉ] when preceded by y or w
-    return 'y' // [y] as in French lune
+    if ('yw'.indexOf(lb(1)) >= 0 && lb(1).length > 0) return 'ʉ'
+    return 'y'
   },
 
   // CONSONANTS
@@ -83,54 +80,49 @@ export const CONVERTION_RULES: {
   'g': (_lb, _la) => ('g'),
 
   'h': (lb, la) => {
-    if (la(1) === '' && 'ptkcč'.split('').includes(lb(1))) return 'ʰ' // [ʰ] in word-final position after p, t, k, c, and č
-    return 'h' // [h] in all positions where it appears, even in word-final position
+    if (la(1) === '' && 'ptkcč'.split('').includes(lb(1))) return 'ʰ'
+    return 'h'
   },
-  // TODO: handle syllable-initial -ph-, -th-, -kh-, -ch-, -čh-. to be pronounced as aspirated stops/affricates [pʰ, tʰ, kʰ, tsʰ, tʃʰ]. unless between two vowels.
-  // Syllable-initial or word-final -ph-, -th-, -kh-, -ch-, -čh- are pronounced as aspirated stops/affricates [pʰ, tʰ, kʰ, tsʰ, tʃʰ] but when between two vowels, they are disyllabic and pronounced as in English "haphazard", "at-hand", "backhanded", "it’s here" and "church hall";
-  // TODO: handle the possibility of single voiceless consonants: hl = [ɬ], hr = [ɾ̥], hm = [m̥], hn = [n̥].
-  // the combinations -hl-, -hr-, -hm- and -hn- may be pronounced as separate consonants or as the following single voiceless consonants: hl = [ɬ], hr = [ɾ̥], hm = [m̥], hn = [n̥].
 
-  'ʼ': (_lb, _la) => ('Ɂ'), // [ʔ] as in English uh-oh
+  'ʼ': (_lb, _la) => ('Ɂ'),
 
-  'ţ': (_lb, _la) => ('θ'), // [θ] as in English thin
-  'ḑ': (_lb, _la) => ('ð'), // [ð] as in English this
+  'ţ': (_lb, _la) => ('θ'),
+  'ḑ': (_lb, _la) => ('ð'),
 
-  'š': (_lb, _la) => ('ʃ'), // [ʃ] unrounded, as in English mesh
-  'ž': (_lb, _la) => ('ʒ'), // [ʒ] unrounded, As in English measure
+  'š': (_lb, _la) => ('ʃ'),
+  'ž': (_lb, _la) => ('ʒ'),
 
-  'ç': (_lb, _la) => ('ç'), // [ç] as heard in the initial sound of English human or hue, or in the German word richtig, or in Japanese ひ (hi) and the palatalization hy-.
+  'ç': (_lb, _la) => ('ç'),
 
-  'x': (_lb, _la) => ('x'), // [x~χ] as in either Latin American or Castilian Spanish "jota", Russian "хорошо", German "bach", or Mandarin "h-".
+  'x': (_lb, _la) => ('x'),
 
-  'l': (_lb, _la) => ('l̪'), // [l̪] as in French, Spanish, or Italian
+  'l': (_lb, _la) => ('l̪'),
 
-  'ļ': (_lb, _la) => ('ɬ'), // [ɬ] as found in Welsh llan
+  'ļ': (_lb, _la) => ('ɬ'),
 
-  'c': (_lb, _la) => ('ts'), // [ts] as in English bits or Italian pizza
-  'ẓ': (_lb, _la) => ('dz'), // [dz] as in English bids or Italian azzurro
+  'c': (_lb, _la) => ('ts'),
+  'ẓ': (_lb, _la) => ('dz'),
 
-  'č': (_lb, _la) => ('tʃ'), // [tʃ] as in English butch
-  'j': (_lb, _la) => ('dʒ'), // [dʒ] as in English budge
+  'č': (_lb, _la) => ('tʃ'),
+  'j': (_lb, _la) => ('dʒ'),
 
   'n': (_lb, la) => {
     const la1 = la(1)
     if (la1 === 'ř') return 'n'
-    if ('kgx'.split('').includes(la1)) return 'ŋ' // [ŋ] before k, g, and x
-    return 'n' // [n] is dental, not alveolar
+    if ('kgx'.split('').includes(la1)) return 'ŋ'
+    return 'n'
   },
 
-  'ň': (_lb, _la) => ('ŋ'), // [ŋ] as in English bring
+  'ň': (_lb, _la) => ('ŋ'),
 
   'r': (_lb, la) => {
-    if (followedByAConsonant(la)) return 'ɹ' // [ɹ] as in English red
-    return 'ɾ' // single tap / flap [ɾ]
+    if (followedByAConsonant(la)) return 'ɹ'
+    return 'ɾ'
   },
 
-  'ř': (_lb, _la) => ('ʁ'), // [ʁ] as in French rire or German Ruhr
-  // When geminated it is either [ʁː] or can be strengthened to a uvular trill [ʀ]
+  'ř': (_lb, _la) => ('ʁ'),
 
-  'y': (_lb, _la) => ('j'), // [j] as in English yes or German ja
+  'y': (_lb, _la) => ('j'),
 
   'b': (_lb, _la) => ('b'),
   'f': (_lb, _la) => ('f'),

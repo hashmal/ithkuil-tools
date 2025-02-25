@@ -163,7 +163,7 @@ function preprocessText(text: string): string {
 function geminate(ipa: string): string {
   const geminated = ipa
     .replace(/(.)(?<!\1.)\1(?!\1)/g, '$1ː') // Geminate consonants
-    .replace(/ɹɾ/g, 'r') // [ɹ] / [ɾ] becomes a trill [r] when geminated, as in Spanish or Italian caro and carro;
+    .replace(/ɹɾ/g, 'ʀ') // [ɹ] / [ɾ] becomes a trill [r] when geminated, as in Spanish or Italian caro and carro;
     .replace(/ʁʁ/g, 'ʁː') // [ʁ] When geminated it is either [ʁː] or can be strengthened to a uvular trill [ʀ]
 
   return geminated
