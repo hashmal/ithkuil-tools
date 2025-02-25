@@ -6,23 +6,25 @@
 
 ## Usage
 
+Install with `npm install ithkuil-tools` or `yarn add ithkuil-tools`.
+
 Import the provided helper function:
 
-```
+```typescript
 import { romanizedIthkuilToIpa } from './lib/index'
 ```
 
 Then pass some romanized Ithkuil text to it to convert it to an IPA string representation:
 
-```
+```typescript
 const text = 'Wezvwaušburdóu yaizxra sai.' // "Be careful, your fork is actually a fennec."
 const ipa: string | Error = romanizedIthkuilToIpa(text)
 ```
 
 Note the return type of `romanizedIthkuilToIpa()`: ` string | Error`. This is because the conversion isn't guaranteed, either because of bad input or an internal bug. Just Add a check to be able to access the actual result:
 
-```
-if (typeof ipa === 'string') console.log(ipa) // [wɛzvwauʃbuɹd̪óu ːjaɪzxɾa ːsai]
+```typescript
+if (typeof ipa === 'string') console.log(ipa) // [wɛzvwauʃbuɹd̪óu jaɪzxɾa sai]
 ```
 
 Conversely, you can inspect the returned error if that happens. It'll contain the error cause, what character index caused the failure, and the usual stack trace.
