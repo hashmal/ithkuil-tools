@@ -36,6 +36,7 @@ export const CONVERTION_RULES: {
   'i': (lb, la) => {
     if (beginingOfBivocalicConjunct(la)) return 'i' // [i] at the beginning of a bivocalic conjunct
     if (lb(1) === 'y' || la(1)) return 'ɪ' // [ɪ] when preceded or followed by y
+    return 'i' // default value to fill a void in the documentation
   },
 
   'o': (_lb, la) => {
@@ -52,6 +53,7 @@ export const CONVERTION_RULES: {
   'u': (lb, la) => {
     if (beginingOfBivocalicConjunct(la)) return 'u' // [u] at the beginning of a bivocalic conjunct
     if (lb(1) === 'w' || la(1) === 'w') return 'ʊ' // [ʊ] when preceded or followed by w
+    return 'u' // default value to fill a void in the documentation
   },
 
   'ü': (lb, _la) => {
@@ -77,7 +79,6 @@ export const CONVERTION_RULES: {
   // the combinations -hl-, -hr-, -hm- and -hn- may be pronounced as separate consonants or as the following single voiceless consonants: hl = [ɬ], hr = [ɾ̥], hm = [m̥], hn = [n̥].
 
   'ʼ': (_lb, _la) => ('Ɂ'), // [ʔ] as in English uh-oh
-  "'": (_lb, _la) => ('Ɂ'), // alternate character for [ʔ]
 
   'ţ': (_lb, _la) => ('θ'), // [θ] as in English thin
   'ḑ': (_lb, _la) => ('ð'), // [ð] as in English this

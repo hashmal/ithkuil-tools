@@ -12,7 +12,13 @@ function unstressCharacter(character: string): { character: string, stressed: bo
 }
 
 function preprocessText(text: string): string {
-  return text.toLowerCase().replace(/\s+/, ' ')
+  return text
+    .toLowerCase() // Make everything lowercase
+    .replace(/\.|,/g, ' ') // Remove punctuation
+    .replace(/\s+/g, ' ') // Remove extra spaces
+    .replace(/^\s+/, '') // Remove leading spaces
+    .replace(/\s+$/, '') // Remove trailing spaces
+    .replace(/'/, 'ʼ') // Replace apostrophes with glottal stops
 }
 
 // TODO: stress marks.
