@@ -8,8 +8,9 @@
   "private": false,
   "type": "module",
   "scripts": {
-    "typecheck": "tsc --noEmit",
-    "lint": "eslint ./lib --ext .js,.ts",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit --watch",
+    "lint": "eslint ./lib --ext .ts",
     "test": "jest --watch"
   },
   "devDependencies": {
