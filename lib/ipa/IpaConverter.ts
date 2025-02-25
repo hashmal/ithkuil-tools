@@ -11,6 +11,10 @@ function unstressCharacter(character: string): { character: string, stressed: bo
   return { character: VOWELS_STRING[index], stressed: true }
 }
 
+function preprocessText(text: string): string {
+  return text.toLowerCase().replace(/\s+/, ' ')
+}
+
 // TODO: stress marks.
 export class IpaConverter {
   private text!: string
@@ -20,7 +24,7 @@ export class IpaConverter {
   private DEFAULT_OPTIONS: IpaConverterOptions = { stressMark: 'accent' }
 
   constructor(text: string, options?: IpaConverterOptions) {
-    this.text = text.toLowerCase()
+    this.text = preprocessText(text)
     this.options = { ...this.DEFAULT_OPTIONS, ...(options ?? {}) }
   }
 
