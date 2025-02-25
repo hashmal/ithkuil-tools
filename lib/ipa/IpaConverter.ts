@@ -1,5 +1,6 @@
 import { CONVERTION_RULES } from './ipa-conversion-rules'
 import { STRESSED_VOWELS_STRING, VOWELS_STRING } from '../phonology'
+import { IpaConversionError } from './IpaConversionError'
 
 const STRESS_MARK_ACCENT = '\u0301'
 
@@ -35,12 +36,12 @@ export class IpaConverter {
     brackets: true,
   }
 
-  constructor(text: string, options?: IpaConverterOptions) {
-    this.text = preprocessText(text)
+  constructor(romanizedIthkuilText: string, options?: IpaConverterOptions) {
+    this.text = preprocessText(romanizedIthkuilText)
     this.options = { ...this.DEFAULT_OPTIONS, ...(options ?? {}) }
   }
 
-  public romanizationToIpa(): string | undefined {
+  public textToIpa(): string | Error {
     let ipaAccumulator: string = ''
 
     for (this.index = 0; this.index < this.text.length; this.index++) {
@@ -48,8 +49,11 @@ export class IpaConverter {
       const { character, stressed } = unstressCharacter(currentCharacter)
       const matcher = CONVERTION_RULES[character]
       if (typeof matcher !== 'function') {
-        console.error(this.prettyFailMessage('no matcher found'))
-        return
+        try {
+          throw new IpaConversionError(this.prettyFailMessage(), { cause: 'no matcher found' })
+        } catch (error) {
+          if (error instanceof Error) return error
+        }
       }
 
       const ipaCharacter: string | undefined = matcher(this.lookBehind(), this.lookAhead())
@@ -57,8 +61,11 @@ export class IpaConverter {
         ipaAccumulator += ipaCharacter
         if (stressed && this.options?.stressMark === 'accent') ipaAccumulator += STRESS_MARK_ACCENT
       } else {
-        console.error(this.prettyFailMessage('incomplete rules'))
-        return
+        try {
+          throw new IpaConversionError(this.prettyFailMessage(), { cause: 'incomplete rules' })
+        } catch (error) {
+          if (error instanceof Error) return error
+        }
       }
     }
 
@@ -89,9 +96,9 @@ export class IpaConverter {
     return (length) => (this.text.slice(this.index - length, this.index))
   }
 
-  private prettyFailMessage(reason: string): string {
-    return `IPA convertion failed at index ${this.index} (${reason}):\n` +
-      `  ${this.text}\n` +
-      '--' + '-'.repeat(this.index) + '^'
+  private prettyFailMessage(): string {
+    return `failed at index ${this.index}:\n` +
+      `${this.text}\n` +
+      '-'.repeat(this.index) + '^'
   }
 }

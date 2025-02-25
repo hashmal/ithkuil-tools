@@ -1,7 +1,8 @@
 import { romanizedIthkuilToIpa } from '../../lib/index'
+import { IpaConversionError } from '../../lib/ipa/IpaConversionError'
 
 // Helper function to reduce verbosity.
-function ipa(text:string): string | undefined {
+function ipa(text:string): string | IpaConversionError {
   return romanizedIthkuilToIpa(text, { brackets: false })
 }
 
