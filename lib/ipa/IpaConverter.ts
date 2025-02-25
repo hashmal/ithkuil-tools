@@ -1,6 +1,8 @@
 import { CONVERTION_RULES } from './ipa-conversion-rules'
 import { STRESSED_VOWELS_STRING, VOWELS_STRING } from '../phonology'
 
+const STRESS_MARK_ACCENT = '\u0301'
+
 export type IpaConverterOptions = {
   stressMark?: 'accent' | 'none'
   brackets?: boolean
@@ -53,7 +55,7 @@ export class IpaConverter {
       const ipaCharacter: string | undefined = matcher(this.lookBehind(), this.lookAhead())
       if (ipaCharacter) {
         ipaAccumulator += ipaCharacter
-        if (stressed && this.options?.stressMark === 'accent') ipaAccumulator += '\u0301' // Add stress mark
+        if (stressed && this.options?.stressMark === 'accent') ipaAccumulator += STRESS_MARK_ACCENT
       } else {
         console.error(this.prettyFailMessage('incomplete rules'))
         return
@@ -61,11 +63,12 @@ export class IpaConverter {
     }
 
     const geminatedIpaAccumulator = this.geminate(ipaAccumulator)
+    const normalizedAccumulator = geminatedIpaAccumulator.normalize()
 
     if (this.options.brackets) {
-      return `[${geminatedIpaAccumulator}]`
+      return `[${normalizedAccumulator}]`
     } else {
-      return geminatedIpaAccumulator
+      return normalizedAccumulator
     }
   }
 
