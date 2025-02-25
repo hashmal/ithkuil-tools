@@ -1,0 +1,29 @@
+{
+    "[javascript]": {
+        "editor.tabSize": 2
+    },
+    "[typescript]": {
+        "editor.tabSize": 2
+    },
+    "eslint.lintTask.enable": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    },
+    "eslint.workingDirectories": [
+        {
+            "mode": "auto"
+        }
+    ],
+    "eslint.validate": [
+        "javascript",
+        "typescript"
+    ],
+    "eslint.format.enable": true,
+    "editor.formatOnSave": true,
+    "eslint.codeActionsOnSave.rules": null,
+    "workbench.colorCustomizations": {
+        "titleBar.activeBackground": "#b58900",
+        "titleBar.inactiveBackground": "#b58900",
+        "activityBar.background": "#b58900",
+    },
+}
