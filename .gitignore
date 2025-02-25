@@ -1,1 +1,17 @@
-node_modules
+playground.ts
+
+# Private Node Modules
+node_modules/
+creds.js
+
+# Mac/OSX
+.DS_Store
+
+# Distribution / packaging
+dist/
+
+# Unit test / coverage reports
+.coverage
+
+# Environments
+.env
