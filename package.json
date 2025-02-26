@@ -12,7 +12,7 @@
   ],
   "license": "MIT",
   "private": false,
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "clean": "rimraf dist",
     "prebuild": "yarn clean",

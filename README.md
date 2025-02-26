@@ -1,8 +1,6 @@
 # ithkuil-tools
 
- A set of Ithkuil tools, starting with IPA generation.
-
- It is not ready for prime-time so it's not on NPM yet, but you can still play with it locally.
+A set of Ithkuil tools, starting with IPA generation.
 
 ## Usage
 
