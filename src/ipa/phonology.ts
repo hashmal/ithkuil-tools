@@ -7,6 +7,24 @@ export const CONSONANTS = [
 ] as const
 export type Consonant = typeof CONSONANTS[number]
 
+export const STOPS = ['p', 'b', 't', 'd', 'k', 'g', 'ʼ'] as const
+export type Stop = typeof STOPS[number]
+
+export const NASALS = ['m', 'n', 'ň'] as const
+export type Nsaal = typeof NASALS[number]
+
+export const FRICATIVES = ['f', 'v', 'ţ', 'ḑ', 's', 'z', 'š', 'ž', 'ç', 'x', 'h', 'ļ'] as const
+export type Fricative = typeof FRICATIVES[number]
+
+export const AFFRICATES = ['c', 'ẓ', 'č', 'j'] as const
+export type Affricate = typeof AFFRICATES[number]
+
+export const FLAP_TRILL = ['r'] as const
+export type FlapTrill = typeof FLAP_TRILL[number]
+
+export const APPROXIMANTS = ['w', 'y', 'ř', 'l'] as const
+export type Approximant = typeof APPROXIMANTS[number]
+
 // VOWELS
 
 export const VOWELS = ['i', 'ü', 'u', 'e', 'ö', 'ë', 'o', 'ä', 'a'] as const
