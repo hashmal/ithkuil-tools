@@ -13,7 +13,7 @@ function unstress(word: string) {
     .replace(/á/g, 'a')
 }
 
-export class SyllableSplitter3 {
+export class SyllableSplitter {
   word!: string
   unstressedWord!: string
   index: number = 0
@@ -47,18 +47,54 @@ export class SyllableSplitter3 {
     return ranges
   }
 
-  conflicts(): number[][] {
+  consonantSplit(consonant: string): number {
+    if (consonant === 'zvw') return 1
+    if (consonant === 'rd') return 1
+    return 0
+  }
+
+  // lookBehind(length: number): string {
+  //   return this.word.slice(this.index - length, this.index)
+  // }
+
+  // lookahead(length: number): string {
+  //   return this.word.slice(this.index + 1, this.index + 1 + length)
+  // }
+
+  conflicts() {
     const vowelRanges = this.vowelRanges()
+    const output: string[][] = []
 
     for (let index = 0; index < vowelRanges.length-2; index+=2) {
-      const vowelBefore = this.word.slice(vowelRanges[index], vowelRanges[index + 1])
       const consonant = this.word.slice(vowelRanges[index + 1], vowelRanges[index + 2])
+      // place consonant resolution here
+      const consonantLength = consonant.length
+      const split = this.consonantSplit(consonant)
+      const consonantSplit = [
+        consonant.slice(0, split),
+        consonant.slice(split, consonantLength),
+      ]
+      // consonantSplit[0].length
+      // consonantSplit[1].length
+      const vowelBefore = this.word.slice(vowelRanges[index], vowelRanges[index + 1])
       const vowelAfter = this.word.slice(vowelRanges[index + 2], vowelRanges[index + 3])
-      console.log({ vowelBefore, consonant, vowelAfter })
+      console.log({ vowelBefore, consonantSplit, vowelAfter })
 
-      // output.push(syllable)
+      output.push([vowelBefore, consonantSplit.join(''), vowelAfter])
     }
 
     // return output
+    const out = []
+    for (let index = 0; index < output.length; index++) {
+      if (index === 0) {
+        const element = output[index][0]
+        out.push(element)
+      }
+      const element1 = output[index][1]
+      out.push(element1)
+      const element2 = output[index][2]
+      out.push(element2)
+    }
+    return out
   }
 }
