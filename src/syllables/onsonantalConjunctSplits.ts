@@ -19,17 +19,14 @@ export function biConsonantalConjunctSplit(consonants: string): number {
 }
 
 export function triConsonantalConjunctSplit(consonants: string): number {
-  // Ad-hoc rules
-  if (consonants === 'zvw') return 1
-  if (consonants === 'zxr') return 1
-
-  return 0
+  return checkTriConsonantStrength(consonants)
 }
 
 export function tetraConsonantalConjunctSplit(consonants: string): number {
   // Ad-hoc rules
-  if (consonants === 'pssp') return 3
-  return 0
+  // if (consonants === 'pssp') return 3
+
+  return checkTetraConsonantStrength(consonants)
 }
 
 export function pentaConsonantalConjunctSplit(_consonants: string): number {
@@ -41,6 +38,44 @@ function checkBiConsonantStrength(biConsonant: string): number {
     return 0
   } else if (getConsonantCategory(biConsonant[0]) < getConsonantCategory(biConsonant[1])) {
     return 1
+  } else {
+    return 0
+  }
+}
+
+function checkTriConsonantStrength(triConsonant: string): number {
+  if (getConsonantCategory(triConsonant[0]) > getConsonantCategory(triConsonant[1])) {
+    return 0
+  } else if (getConsonantCategory(triConsonant[0]) < getConsonantCategory(triConsonant[1])) {
+    if (getConsonantCategory(triConsonant[1]) > getConsonantCategory(triConsonant[2])) {
+      return 1
+    } else if (getConsonantCategory(triConsonant[1]) < getConsonantCategory(triConsonant[2])) {
+      return 2
+    } else {
+      return 1
+    }
+  } else {
+    return 0
+  }
+}
+
+function checkTetraConsonantStrength(tetraConsonant: string): number {
+  if (getConsonantCategory(tetraConsonant[0]) > getConsonantCategory(tetraConsonant[1])) {
+    return 0
+  } else if (getConsonantCategory(tetraConsonant[0]) < getConsonantCategory(tetraConsonant[1])) {
+    if (getConsonantCategory(tetraConsonant[1]) > getConsonantCategory(tetraConsonant[2])) {
+      return 1
+    } else if (getConsonantCategory(tetraConsonant[1]) < getConsonantCategory(tetraConsonant[2])) {
+      if (getConsonantCategory(tetraConsonant[2]) > getConsonantCategory(tetraConsonant[3])) {
+        return 2
+      } else if (getConsonantCategory(tetraConsonant[2]) < getConsonantCategory(tetraConsonant[3])) {
+        return 3
+      } else {
+        return 2
+      }
+    } else {
+      return 1
+    }
   } else {
     return 0
   }
