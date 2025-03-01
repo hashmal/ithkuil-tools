@@ -50,6 +50,7 @@ export class SyllableSplitter {
   consonantSplit(consonant: string): number {
     if (consonant === 'zvw') return 1
     if (consonant === 'rd') return 1
+    if (consonant === 'šb') return 1
     return 0
   }
 
@@ -61,7 +62,7 @@ export class SyllableSplitter {
   //   return this.word.slice(this.index + 1, this.index + 1 + length)
   // }
 
-  conflicts() {
+  conflicts(): string[] {
     const vowelRanges = this.vowelRanges()
     const output: string[][] = []
 
@@ -76,25 +77,42 @@ export class SyllableSplitter {
       ]
       // consonantSplit[0].length
       // consonantSplit[1].length
-      const vowelBefore = this.word.slice(vowelRanges[index], vowelRanges[index + 1])
+      const vowelBefore = this.word.slice(vowelRanges[index], vowelRanges[index + 1 + consonantSplit[0].length])
       const vowelAfter = this.word.slice(vowelRanges[index + 2], vowelRanges[index + 3])
-      console.log({ vowelBefore, consonantSplit, vowelAfter })
+      // console.log({ vowelBefore, consonantSplit, vowelAfter })
 
-      output.push([vowelBefore, consonantSplit.join(''), vowelAfter])
+      output.push([vowelBefore, consonantSplit, vowelAfter])
     }
 
-    // return output
-    const out = []
+    const joined = this.joiner(output)
+    if (joined[0] === '') {
+      return joined.slice(1, joined.length)
+    } else {
+      return joined
+    }
+  }
+
+  // joiner(output: string[][]) {
+  //   const joined = output.map((trio) => {
+  //     console.log({ trio })
+  //     return [trio[0] + trio[1][0], trio[1][1] + trio[2]]
+  //   })
+  //   console.log(joined)
+  // }
+
+  joiner(output: string[][]): string[] {
+    const accum = []
+    let prev = ''
     for (let index = 0; index < output.length; index++) {
-      if (index === 0) {
-        const element = output[index][0]
-        out.push(element)
-      }
-      const element1 = output[index][1]
-      out.push(element1)
-      const element2 = output[index][2]
-      out.push(element2)
+      const trio = output[index]
+      // console.log({ trio })
+      // return [trio[0] + trio[1][0], trio[1][1] + trio[2]]
+      accum.push(prev + trio[1][0])
+      prev = trio[1][1] + trio[2]
     }
-    return out
+    accum.push(prev)
+
+    // console.log({ accum })
+    return accum
   }
 }
