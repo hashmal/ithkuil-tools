@@ -23,7 +23,38 @@ export class SyllableSplitter {
     this.unstressedWord = unstress(word)
   }
 
-  vowelRanges(): number[] {
+  public splitSyllables(): string[] {
+    const vowelRanges = this.vowelRanges()
+    // const output: string[][] = []
+    const output: [string, string[], string][] = []
+
+    for (let index = 0; index < vowelRanges.length-2; index+=2) {
+      const consonant = this.word.slice(vowelRanges[index + 1], vowelRanges[index + 2])
+      // place consonant resolution here
+      const consonantLength = consonant.length
+      const split = this.consonantSplit(consonant)
+      const consonantSplit = [
+        consonant.slice(0, split),
+        consonant.slice(split, consonantLength),
+      ]
+      // consonantSplit[0].length
+      // consonantSplit[1].length
+      const vowelBefore = this.word.slice(vowelRanges[index], vowelRanges[index + 1 + consonantSplit[0].length])
+      const vowelAfter = this.word.slice(vowelRanges[index + 2], vowelRanges[index + 3])
+      console.log({ vowelBefore, consonantSplit, vowelAfter })
+
+      output.push([vowelBefore, consonantSplit, vowelAfter])
+    }
+
+    const joined = this.joiner(output)
+    if (joined[0] === '') {
+      return joined.slice(1, joined.length)
+    } else {
+      return joined
+    }
+  }
+
+  private vowelRanges(): number[] {
     const ranges: number[] = []
     for (let index = 0; index < this.unstressedWord.length; index++) {
       const character = this.unstressedWord[index]
@@ -47,60 +78,15 @@ export class SyllableSplitter {
     return ranges
   }
 
-  consonantSplit(consonant: string): number {
+  private consonantSplit(consonant: string): number {
     if (consonant === 'zvw') return 1
     if (consonant === 'rd') return 1
     if (consonant === 'šb') return 1
+    if (consonant === 'pssp') return 3
     return 0
   }
 
-  // lookBehind(length: number): string {
-  //   return this.word.slice(this.index - length, this.index)
-  // }
-
-  // lookahead(length: number): string {
-  //   return this.word.slice(this.index + 1, this.index + 1 + length)
-  // }
-
-  conflicts(): string[] {
-    const vowelRanges = this.vowelRanges()
-    const output: string[][] = []
-
-    for (let index = 0; index < vowelRanges.length-2; index+=2) {
-      const consonant = this.word.slice(vowelRanges[index + 1], vowelRanges[index + 2])
-      // place consonant resolution here
-      const consonantLength = consonant.length
-      const split = this.consonantSplit(consonant)
-      const consonantSplit = [
-        consonant.slice(0, split),
-        consonant.slice(split, consonantLength),
-      ]
-      // consonantSplit[0].length
-      // consonantSplit[1].length
-      const vowelBefore = this.word.slice(vowelRanges[index], vowelRanges[index + 1 + consonantSplit[0].length])
-      const vowelAfter = this.word.slice(vowelRanges[index + 2], vowelRanges[index + 3])
-      // console.log({ vowelBefore, consonantSplit, vowelAfter })
-
-      output.push([vowelBefore, consonantSplit, vowelAfter])
-    }
-
-    const joined = this.joiner(output)
-    if (joined[0] === '') {
-      return joined.slice(1, joined.length)
-    } else {
-      return joined
-    }
-  }
-
-  // joiner(output: string[][]) {
-  //   const joined = output.map((trio) => {
-  //     console.log({ trio })
-  //     return [trio[0] + trio[1][0], trio[1][1] + trio[2]]
-  //   })
-  //   console.log(joined)
-  // }
-
-  joiner(output: string[][]): string[] {
+  private joiner(output: [string, string[], string][]): string[] {
     const accum = []
     let prev = ''
     for (let index = 0; index < output.length; index++) {
