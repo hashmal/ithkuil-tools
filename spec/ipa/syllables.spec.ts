@@ -43,7 +43,7 @@ describe.each([
 
 describe.each([
   ['armpla', 'arm-pla'],
-  ['opsspa', 'o-psspa'],
+  ['opsspa', 'opss-pa'],
 ])('[TETRA] %s', (word: string, syllables: string) => {
   it(`${word} resolves to ${syllables}`, () => {
     expect(romanizedIthkuilToSyllables(word)).toEqual(syllables)

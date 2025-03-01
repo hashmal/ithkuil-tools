@@ -28,8 +28,10 @@ export function triConsonantalConjunctSplit(consonants: string): number {
 }
 
 export function tetraConsonantalConjunctSplit(consonants: string): number {
-  // Ad-hoc rules
-  // if (consonants === 'pssp') return 3
+  // Geminable Continuants
+  const continuantsGeminables = new RegExp(`([${CONTINUANT_GEMINABLES.join('')}])\\1`)
+  const continuantGeminableMatch = consonants.match(continuantsGeminables)
+  if (continuantGeminableMatch) return continuantGeminableMatch.index! + 2
 
   return checkTetraConsonantStrength(consonants)
 }
