@@ -1,17 +1,4 @@
-import { Diphthong, DIPHTHONGS, Vowel, VOWELS } from 'ipa/phonology'
-
-function unstress(word: string) {
-  return word
-    .replace(/í/g, 'i')
-    .replace(/û/g, 'ü')
-    .replace(/ú/g, 'u')
-    .replace(/é/g, 'e')
-    .replace(/ô/g, 'ö')
-    .replace(/ê/g, 'ë')
-    .replace(/ó/g, 'o')
-    .replace(/â/g, 'ä')
-    .replace(/á/g, 'a')
-}
+import { Diphthong, DIPHTHONGS, STOPS_GEMINABLES, Vowel, VOWELS } from '../phonology'
 
 export class SyllableSplitter {
   word!: string
@@ -77,12 +64,22 @@ export class SyllableSplitter {
   }
 
   private consonantSplit(consonant: string): number {
+    // `h` splitting syllables
+    if (consonant.match(/^[ptkcč]h$/)) return 1
+
+    // Geminable Stops
+    const stopsGeminables = new RegExp(`([${STOPS_GEMINABLES.join('')}])\\1`)
+    const stopGeminableMatch = consonant.match(stopsGeminables)
+    if (stopGeminableMatch) return stopGeminableMatch.index! + 1
+
+    // Ad-hoc rules
     if (consonant === 'zvw') return 1
     if (consonant === 'rd') return 1
     if (consonant === 'šb') return 1
     if (consonant === 'pssp') return 3
     if (consonant === 'zxr') return 1
     if (consonant === 'rļ') return 1
+
     return 0
   }
 
@@ -98,4 +95,17 @@ export class SyllableSplitter {
 
     return accum
   }
+}
+
+function unstress(word: string) {
+  return word
+    .replace(/í/g, 'i')
+    .replace(/û/g, 'ü')
+    .replace(/ú/g, 'u')
+    .replace(/é/g, 'e')
+    .replace(/ô/g, 'ö')
+    .replace(/ê/g, 'ë')
+    .replace(/ó/g, 'o')
+    .replace(/â/g, 'ä')
+    .replace(/á/g, 'a')
 }

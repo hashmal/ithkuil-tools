@@ -1,5 +1,5 @@
 import { CONVERTION_RULES, IpaConverterMatcher } from './ipa-conversion-rules'
-import { STRESSED_VOWELS_STRING, VOWELS_STRING } from './phonology'
+import { STRESSED_VOWELS_STRING, VOWELS_STRING } from '../phonology'
 import { IpaConversionError } from './IpaConversionError'
 
 export type IpaConverterOptions = {

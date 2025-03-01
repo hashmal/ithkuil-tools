@@ -1,3 +1,18 @@
+// VOWELS
+
+export const VOWELS = ['i', 'ü', 'u', 'e', 'ö', 'ë', 'o', 'ä', 'a'] as const
+export type Vowel = typeof VOWELS[number]
+
+export const STRESSED_VOWELS = ['í', 'û', 'ú', 'é', 'ô', 'ê', 'ó', 'â', 'á'] as const
+export type StressedVowel = typeof STRESSED_VOWELS[number]
+
+export const VOWELS_STRING = VOWELS.join('')
+export const STRESSED_VOWELS_STRING = STRESSED_VOWELS.join('')
+
+export const DIPHTHONGS = ['ai', 'ei', 'ëi', 'oi', 'ui', 'au', 'eu', 'ëu', 'ou', 'iu'] as const
+export type Diphthong = typeof DIPHTHONGS[number]
+
+
 // CONSONANTS
 
 export const CONSONANTS = [
@@ -25,19 +40,22 @@ export type FlapTrill = typeof FLAP_TRILL[number]
 export const APPROXIMANTS = ['w', 'y', 'ř', 'l'] as const
 export type Approximant = typeof APPROXIMANTS[number]
 
-// VOWELS
 
-export const VOWELS = ['i', 'ü', 'u', 'e', 'ö', 'ë', 'o', 'ä', 'a'] as const
-export type Vowel = typeof VOWELS[number]
+// GEMINATION
 
-export const STRESSED_VOWELS = ['í', 'û', 'ú', 'é', 'ô', 'ê', 'ó', 'â', 'á'] as const
-export type StressedVowel = typeof STRESSED_VOWELS[number]
+export const BETWEEN_VOWELS_GEMINABLES = [
+  'p' , 'b' , 'm' , 't' , 'd' , 'n' , 'k' , 'g' , 'ň' ,
+  'f' , 'v' , 'ţ' , 'ḑ' , 's' , 'z' , 'c' , 'ẓ' , 'š' , 'ž' , 'č' , 'j' , 'ç' , 'x' , 'h' , 'ļ',
+  'r' , 'ř' , 'l', // all but 'w', 'y' and 'ʼ'
+] as const
+export type BetweenVowelsGeminable = typeof BETWEEN_VOWELS_GEMINABLES[number]
 
-export const VOWELS_STRING = VOWELS.join('')
-export const STRESSED_VOWELS_STRING = STRESSED_VOWELS.join('')
+export const CONTINUANT_GEMINABLES = ['ç', 'ḑ', 'f', 'h', 'l', 'ļ', 'm', 'n', 'ň', 'ř', 's', 'š', 'ţ', 'v', 'x', 'z', 'ž'] as const // add 'r'?
+export type ContinuantGeminable = typeof CONTINUANT_GEMINABLES[number]
 
-export const DIPHTHONGS = ['ai', 'ei', 'ëi', 'oi', 'ui', 'au', 'eu', 'ëu', 'ou', 'iu'] as const
-export type Diphthong = typeof DIPHTHONGS[number]
+export const STOPS_GEMINABLES = ['b', 'd', 'g', 'k', 'p', 't'] as const
+export type StopGeminable = typeof STOPS_GEMINABLES[number]
+
 
 /* STRESS NOTATION
 

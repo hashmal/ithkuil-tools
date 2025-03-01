@@ -1,4 +1,4 @@
-import { CONSONANTS, Consonant, VOWELS, Vowel } from './phonology'
+import { CONSONANTS, Consonant, VOWELS, Vowel } from '../phonology'
 
 /** Matcher signature
  * @internal */
