@@ -52,6 +52,8 @@ describe.each([
 
 describe.each([
   ['alpsbwa', 'al-psbwa'],
+  ['ařvzkfa', 'ař-vzkfa'],
+  ['ařnsţla', 'ařn-sţla'],
 ])('[PENTA] %s', (word: string, syllables: string) => {
   it(`${word} resolves to ${syllables}`, () => {
     expect(romanizedIthkuilToSyllables(word)).toEqual(syllables)
