@@ -44,6 +44,6 @@ import {
     romanizedIthkuilToSyllableBoundaries
 } from "ithkuil-tools";
 
-console.log(romanizedIthkuilToSyllables("wezvwaušburdóu")); // we-zvwauš-bur-dóu
-console.log(romanizedIthkuilToSyllableBoundaries("wezvwaušburdóu")) // [ 0, 2, 8, 11, 14 ]
+console.log(romanizedIthkuilToSyllables("Wezvwaušburdóu yaizxra sai")); // [ [ 'we', 'zvwauš', 'bur', 'dóu' ], [ 'yai', 'zxra' ], [ 'sai' ] ]
+console.log(romanizedIthkuilToSyllableBoundaries("Wezvwaušburdóu yaizxra sai")) // [ [ 0, 2, 8, 11, 14 ], [ 0, 3, 7 ], [ 0, 3 ] ]
 ```

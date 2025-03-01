@@ -5,7 +5,7 @@ import { SyllableSplitter } from './SyllableSplitter'
  * @param {string} romanizedIthkuilWord - Romanized Ithkuil word
  * @returns {string[]} Array of syllables
  */
-export function romanizedIthkuilToSyllables(romanizedIthkuilText: string): string[] {
+export function romanizedIthkuilToSyllables(romanizedIthkuilText: string): string[][] {
   const boundaries = []
   for (const word of romanizedIthkuilText.split(/\s+/)) {
     const syllableSplitter = new SyllableSplitter(word)
