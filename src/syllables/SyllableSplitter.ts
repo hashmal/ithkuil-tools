@@ -40,6 +40,17 @@ export class SyllableSplitter {
     }
   }
 
+  public syllableBoundaries(): number[] {
+    const syllables = this.splitSyllables()
+    const boundaries: number[] = [0]
+    let index = 0
+    for (const syllable of syllables) {
+      index += syllable.length
+      boundaries.push(index)
+    }
+    return boundaries
+  }
+
   private vowelRanges(): number[] {
     const ranges: number[] = []
     for (let index = 0; index < this.unstressedWord.length; index++) {
