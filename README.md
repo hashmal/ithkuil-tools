@@ -1,10 +1,17 @@
 # ithkuil-tools
 
-A set of Ithkuil tools, starting with IPA generation.
+A set of Ithkuil tools, with more to come soon:
+
+* IPA Translation
+* Syllable Splitting (Beta)
+
+## Installation
+
+`npm install ithkuil-tools` or `yarn add ithkuil-tools`.
 
 ## Usage
 
-Install with `npm install ithkuil-tools` or `yarn add ithkuil-tools`.
+### IPA Translation
 
 Import the provided helper function:
 
@@ -28,3 +35,15 @@ if (typeof ipa === 'string') console.log(ipa) // [wɛzvwauʃbuɹd̪óu jaɪzxɾ
 Conversely, you can inspect the returned error if that happens. It'll contain the error cause, what character index caused the failure, and the usual stack trace.
 
 The full signature of the helper function is `romanizedIthkuilToIpa(romanizedIthkuilText: string, options?: IpaConverterOptions): string | IpaConversionError`. A few options can be provided, check the code for more details about those.
+
+### Syllable Splitting (Beta)
+
+```typescript
+import {
+    romanizedIthkuilToSyllables,
+    romanizedIthkuilToSyllableBoundaries
+} from "ithkuil-tools";
+
+console.log(romanizedIthkuilToSyllables("wezvwaušburdóu")); // we-zvwauš-bur-dóu
+console.log(romanizedIthkuilToSyllableBoundaries("wezvwaušburdóu")) // [ 0, 2, 8, 11, 14 ]
+```
