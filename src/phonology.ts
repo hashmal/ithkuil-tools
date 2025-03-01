@@ -1,5 +1,7 @@
 // VOWELS
 
+import { match, P } from 'ts-pattern'
+
 export const VOWELS = ['i', 'ü', 'u', 'e', 'ö', 'ë', 'o', 'ä', 'a'] as const
 export type Vowel = typeof VOWELS[number]
 
@@ -16,17 +18,14 @@ export type Diphthong = typeof DIPHTHONGS[number]
 // CONSONANTS
 
 export const CONSONANTS = [
-  'p' , 'b' , 'm' , 't' , 'd' , 'n' , 'k' , 'g' , 'ň' , 'ʼ',
-  'f' , 'v' , 'ţ' , 'ḑ' , 's' , 'z' , 'c' , 'ẓ' , 'š' , 'ž' , 'č' , 'j' , 'ç' , 'x' , 'h' , 'ļ',
-  'w' , 'r' , 'y' , 'ř' , 'l',
+  'p', 'b', 'm', 't', 'd', 'n', 'k', 'g', 'ň', 'ʼ',
+  'f', 'v', 'ţ', 'ḑ', 's', 'z', 'c', 'ẓ', 'š', 'ž', 'č', 'j', 'ç', 'x', 'h', 'ļ',
+  'w', 'r', 'y', 'ř', 'l',
 ] as const
 export type Consonant = typeof CONSONANTS[number]
 
 export const STOPS = ['p', 'b', 't', 'd', 'k', 'g', 'ʼ'] as const
 export type Stop = typeof STOPS[number]
-
-export const NASALS = ['m', 'n', 'ň'] as const
-export type Nsaal = typeof NASALS[number]
 
 export const FRICATIVES = ['f', 'v', 'ţ', 'ḑ', 's', 'z', 'š', 'ž', 'ç', 'x', 'h', 'ļ'] as const
 export type Fricative = typeof FRICATIVES[number]
@@ -34,12 +33,34 @@ export type Fricative = typeof FRICATIVES[number]
 export const AFFRICATES = ['c', 'ẓ', 'č', 'j'] as const
 export type Affricate = typeof AFFRICATES[number]
 
+export const NASALS = ['m', 'n', 'ň'] as const
+export type Nsaal = typeof NASALS[number]
+
 export const FLAP_TRILL = ['r'] as const
 export type FlapTrill = typeof FLAP_TRILL[number]
 
 export const APPROXIMANTS = ['w', 'y', 'ř', 'l'] as const
 export type Approximant = typeof APPROXIMANTS[number]
 
+export enum ConsonantCategory {
+  Stop = 6,
+  Fricative = 5,
+  Affricate = 4,
+  Nsaal = 3,
+  FlapTrill = 2,
+  Approximant = 1
+}
+
+export function getConsonantCategory(letter: string): ConsonantCategory | 0 {
+  return match(letter)
+    .with(P.string.regex(new RegExp(`[${STOPS.join()}]`)), () => ConsonantCategory.Stop)
+    .with(P.string.regex(new RegExp(`[${FRICATIVES.join()}]`)), () => ConsonantCategory.Fricative)
+    .with(P.string.regex(new RegExp(`[${AFFRICATES.join()}]`)), () => ConsonantCategory.Affricate)
+    .with(P.string.regex(new RegExp(`[${NASALS.join()}]`)), () => ConsonantCategory.Nsaal)
+    .with(P.string.regex(new RegExp(`[${FLAP_TRILL.join()}]`)), () => ConsonantCategory.FlapTrill)
+    .with(P.string.regex(new RegExp(`[${APPROXIMANTS.join()}]`)), () => ConsonantCategory.Approximant)
+    .otherwise(() => 0)
+}
 
 // GEMINATION
 
