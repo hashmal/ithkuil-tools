@@ -18,8 +18,8 @@ export class SyllableSplitter {
    * @param {string} word - Word to split into syllables
    */
   constructor(word: string) {
-    this.word = word
-    this.unstressedWord = unstress(word)
+    this.word = preprocess(word)
+    this.unstressedWord = unstress(this.word)
   }
 
   /** Split given word into syllables
@@ -156,4 +156,13 @@ function unstress(word: string) {
     .replace(/ó/g, 'o')
     .replace(/â/g, 'ä')
     .replace(/á/g, 'a')
+}
+
+/** Preprocess text, i.e. make it lowercase.
+ *
+ * @param {string} romanizedIthkuilText - Romanized Ithkuil text
+ * @returns {string} Preprocessed text
+ */
+function preprocess(romanizedIthkuilText:string): string {
+  return romanizedIthkuilText.toLowerCase()
 }
