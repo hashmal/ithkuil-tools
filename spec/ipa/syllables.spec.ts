@@ -2,6 +2,7 @@ import { romanizedIthkuilToSyllables } from '../../src/syllables/romanizedIthkui
 
 describe.each([
   ['oa', 'o-a'],
+  ['odda', 'od-da'],
   ['koa', 'ko-a'],
   ['ai', 'ai'],
   ['koala', 'ko-a-la'],
