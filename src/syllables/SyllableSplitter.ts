@@ -25,24 +25,22 @@ export class SyllableSplitter {
 
   public splitSyllables(): string[] {
     const vowelRanges = this.vowelRanges()
-    // const output: string[][] = []
     const output: [string, string[], string][] = []
+
+    if (vowelRanges.length === 2) return [this.word]
 
     for (let index = 0; index < vowelRanges.length-2; index+=2) {
       const consonant = this.word.slice(vowelRanges[index + 1], vowelRanges[index + 2])
-      // place consonant resolution here
       const consonantLength = consonant.length
-      const split = this.consonantSplit(consonant)
+      const split = this.consonantSplit(consonant) // consonant resolution here
       const consonantSplit = [
         consonant.slice(0, split),
         consonant.slice(split, consonantLength),
       ]
-      // consonantSplit[0].length
-      // consonantSplit[1].length
-      const vowelBefore = this.word.slice(vowelRanges[index], vowelRanges[index + 1 + consonantSplit[0].length])
+      const vowelBefore = this.word.slice(vowelRanges[index], vowelRanges[index + 1])
       const vowelAfter = this.word.slice(vowelRanges[index + 2], vowelRanges[index + 3])
-      console.log({ vowelBefore, consonantSplit, vowelAfter })
 
+      // console.log({ vowelBefore, consonantSplit, vowelAfter })
       output.push([vowelBefore, consonantSplit, vowelAfter])
     }
 
@@ -83,22 +81,21 @@ export class SyllableSplitter {
     if (consonant === 'rd') return 1
     if (consonant === 'šb') return 1
     if (consonant === 'pssp') return 3
+    if (consonant === 'zxr') return 1
+    if (consonant === 'rļ') return 1
     return 0
   }
 
   private joiner(output: [string, string[], string][]): string[] {
     const accum = []
-    let prev = ''
+    let prev = output[0][0]
     for (let index = 0; index < output.length; index++) {
       const trio = output[index]
-      // console.log({ trio })
-      // return [trio[0] + trio[1][0], trio[1][1] + trio[2]]
       accum.push(prev + trio[1][0])
       prev = trio[1][1] + trio[2]
     }
     accum.push(prev)
 
-    // console.log({ accum })
     return accum
   }
 }
