@@ -1,3 +1,6 @@
-export { romanizedIthkuilToIpa } from 'ipa/romanizedIthkuilToIpa'
 export { IpaConverter } from 'ipa/IpaConverter'
 export { IpaConversionError } from 'ipa/IpaConversionError'
+export { SyllableSplitter } from 'syllables/SyllableSplitter'
+export { romanizedIthkuilToIpa } from 'ipa/romanizedIthkuilToIpa'
+export { romanizedIthkuilToSyllables } from 'syllables/romanizedIthkuilToSyllables'
+export { romanizedIthkuilToSyllableBoundaries } from 'syllables/romanizedIthkuilToSyllableBoundaries'
