@@ -1,4 +1,5 @@
-import { Diphthong, DIPHTHONGS, STOPS_GEMINABLES, Vowel, VOWELS } from '../phonology'
+import { Diphthong, DIPHTHONGS, Vowel, VOWELS } from '../phonology'
+import { biConsonantalConjunctSplit, pentaConsonantalConjunctSplit, tetraConsonantalConjunctSplit, triConsonantalConjunctSplit } from './onsonantalConjunctSplits'
 
 export class SyllableSplitter {
   word!: string
@@ -63,24 +64,22 @@ export class SyllableSplitter {
     return ranges
   }
 
-  private consonantSplit(consonant: string): number {
-    // `h` splitting syllables
-    if (consonant.match(/^[ptkcč]h$/)) return 1
-
-    // Geminable Stops
-    const stopsGeminables = new RegExp(`([${STOPS_GEMINABLES.join('')}])\\1`)
-    const stopGeminableMatch = consonant.match(stopsGeminables)
-    if (stopGeminableMatch) return stopGeminableMatch.index! + 1
-
-    // Ad-hoc rules
-    if (consonant === 'zvw') return 1
-    if (consonant === 'rd') return 1
-    if (consonant === 'šb') return 1
-    if (consonant === 'pssp') return 3
-    if (consonant === 'zxr') return 1
-    if (consonant === 'rļ') return 1
-
-    return 0
+  private consonantSplit(consonants: string): number {
+    switch (consonants.length) {
+      case 0:
+      case 1:
+        return 0
+      case 2:
+        return biConsonantalConjunctSplit(consonants)
+      case 3:
+        return triConsonantalConjunctSplit(consonants)
+      case 4:
+        return tetraConsonantalConjunctSplit(consonants)
+      case 5:
+        return pentaConsonantalConjunctSplit(consonants)
+      default:
+        throw new Error("Consonant conjuncts can't be longer than 5")
+    }
   }
 
   private joiner(output: [string, string[], string][]): string[] {
