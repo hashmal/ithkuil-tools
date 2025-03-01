@@ -29,8 +29,8 @@ export function tetraConsonantalConjunctSplit(consonants: string): number {
   return checkTetraConsonantStrength(consonants)
 }
 
-export function pentaConsonantalConjunctSplit(_consonants: string): number {
-  return 0
+export function pentaConsonantalConjunctSplit(consonants: string): number {
+  return checkPentaConsonantStrength(consonants)
 }
 
 function checkBiConsonantStrength(biConsonant: string): number {
@@ -70,6 +70,35 @@ function checkTetraConsonantStrength(tetraConsonant: string): number {
         return 2
       } else if (getConsonantCategory(tetraConsonant[2]) < getConsonantCategory(tetraConsonant[3])) {
         return 3
+      } else {
+        return 2
+      }
+    } else {
+      return 1
+    }
+  } else {
+    return 0
+  }
+}
+
+function checkPentaConsonantStrength(pentaConsonant: string): number {
+  if (getConsonantCategory(pentaConsonant[0]) > getConsonantCategory(pentaConsonant[1])) {
+    return 0
+  } else if (getConsonantCategory(pentaConsonant[0]) < getConsonantCategory(pentaConsonant[1])) {
+    if (getConsonantCategory(pentaConsonant[1]) > getConsonantCategory(pentaConsonant[2])) {
+      return 1
+    } else if (getConsonantCategory(pentaConsonant[1]) < getConsonantCategory(pentaConsonant[2])) {
+      if (getConsonantCategory(pentaConsonant[2]) > getConsonantCategory(pentaConsonant[3])) {
+        return 2
+      } else if (getConsonantCategory(pentaConsonant[2]) < getConsonantCategory(pentaConsonant[3])) {
+        // return 3
+        if (getConsonantCategory(pentaConsonant[3]) > getConsonantCategory(pentaConsonant[4])) {
+          return 3
+        } else if (getConsonantCategory(pentaConsonant[3]) < getConsonantCategory(pentaConsonant[4])) {
+          return 4
+        } else {
+          return 3
+        }
       } else {
         return 2
       }
