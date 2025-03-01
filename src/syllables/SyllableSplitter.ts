@@ -1,16 +1,31 @@
 import { Diphthong, DIPHTHONGS, Vowel, VOWELS } from '../phonology'
 import { biConsonantalConjunctSplit, pentaConsonantalConjunctSplit, tetraConsonantalConjunctSplit, triConsonantalConjunctSplit } from './onsonantalConjunctSplits'
 
+/** Used to split single words into syllables. */
 export class SyllableSplitter {
-  word!: string
-  unstressedWord!: string
-  index: number = 0
+  /** Word to split into syllables */
+  public readonly word!: string
 
+  /** Word without stress marks */
+  private unstressedWord!: string
+
+  /** Current index
+   * @internal */
+  private index: number = 0
+
+  /** Create a new SyllableSplitter instance
+   *
+   * @param {string} word - Word to split into syllables
+   */
   constructor(word: string) {
     this.word = word
     this.unstressedWord = unstress(word)
   }
 
+  /** Split given word into syllables
+   *
+   * @returns {string[]} Array of syllables
+   */
   public splitSyllables(): string[] {
     const vowelRanges = this.vowelRanges()
     const output: [string, string[], string][] = []
@@ -40,6 +55,10 @@ export class SyllableSplitter {
     }
   }
 
+  /** Get syllable boundaries in form of an array of indices
+   *
+   * @returns {number[]} Array of indices
+   */
   public syllableBoundaries(): number[] {
     const syllables = this.splitSyllables()
     const boundaries: number[] = [0]
@@ -51,6 +70,10 @@ export class SyllableSplitter {
     return boundaries
   }
 
+  /** Compute vowel ranges
+   *
+   * @returns {number[]} Array of vowel ranges
+   */
   private vowelRanges(): number[] {
     const ranges: number[] = []
     for (let index = 0; index < this.unstressedWord.length; index++) {
@@ -75,6 +98,11 @@ export class SyllableSplitter {
     return ranges
   }
 
+  /** Split consonant according to various rules.
+   *
+   * @param {string} consonants - Consonants to split
+   * @returns {number} Index to split the consonants at
+   */
   private consonantSplit(consonants: string): number {
     switch (consonants.length) {
       case 0:
@@ -93,6 +121,11 @@ export class SyllableSplitter {
     }
   }
 
+  /** Join syllables into a single array
+   *
+   * @param {Array<[string, string[], string]>} output - Array of tuples
+   * @returns {string[]} Array of syllables
+   */
   private joiner(output: [string, string[], string][]): string[] {
     const accum = []
     let prev = output[0][0]
@@ -107,6 +140,11 @@ export class SyllableSplitter {
   }
 }
 
+/** Remove stress marks on vowels
+ *
+ * @param {string} word - Word to remove stress marks from
+ * @returns {string} Word without stress marks
+ */
 function unstress(word: string) {
   return word
     .replace(/í/g, 'i')
