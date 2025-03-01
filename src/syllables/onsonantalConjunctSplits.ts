@@ -5,7 +5,7 @@ export function biConsonantalConjunctSplit(consonants: string): number {
   if (consonants.match(/^[ptkcč]h$/)) return 1
 
   // Geminable Stops
-  const stopsGeminables = new RegExp(`^([${STOPS_GEMINABLES.join('')}])\\1$`)
+  const stopsGeminables = new RegExp(`([${STOPS_GEMINABLES.join('')}])\\1`)
   const stopGeminableMatch = consonants.match(stopsGeminables)
   if (stopGeminableMatch) return stopGeminableMatch.index! + 1
 
@@ -19,6 +19,11 @@ export function biConsonantalConjunctSplit(consonants: string): number {
 }
 
 export function triConsonantalConjunctSplit(consonants: string): number {
+  // Geminable Stops
+  const stopsGeminables = new RegExp(`([${STOPS_GEMINABLES.join('')}])\\1`)
+  const stopGeminableMatch = consonants.match(stopsGeminables)
+  if (stopGeminableMatch) return stopGeminableMatch.index! + 1
+
   return checkTriConsonantStrength(consonants)
 }
 
