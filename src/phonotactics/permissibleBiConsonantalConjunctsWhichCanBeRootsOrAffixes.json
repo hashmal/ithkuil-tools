@@ -1,0 +1,31 @@
+{
+  "permissibleBiConsonantalConjunctsWhichCanBeRootsOrAffixes": [
+    ["p", "ptdkgfvţḑszšžçxhļcżčjmnňrlwyř"],
+    ["t", "pbtkgfvçxhļmnňrlwyř"],
+    ["k", "pbtdkfvţḑszšžçhļcżčjmnrlwyř"],
+    ["b", "btdkgfvţḑszšžçxhcżčjmnňrlwyř"],
+    ["d", "pbdkgfvçxhmnňrlwyř"],
+    ["g", "pbtdgfvţḑszšžçhcżčjmnrlwyř"],
+    ["f", "pbtdkgfţḑszšžçxhļcżčjmnňrlwyř"],
+    ["ţ", "pbtdkgfvţszšžçxhļcżčjmnňrlwyř"],
+    ["ç", "pbtdkgfvţḑxcżčjmnňrlwyř"],
+    ["x", "pbtdkfvţḑxcżčjmnrlw"],
+    ["v", "pbtdkgvţḑszšžçxhļcżčjmnňrlwyř"],
+    ["ḑ", "pbtdkgfvḑçxhļcżčjmnňrlwyř"],
+    ["ļ", "pbtdkgfvţḑxcżčjmnňrlwyř"],
+    ["s", "pbtdkgfvţḑsxhļcčjmnňrlwyř"],
+    ["š", "pbtdkgfvţḑšxhļčjmnňrlwyř"],
+    ["z", "pbtdkgfvţḑzxhļcżčjmnňrlwyř"],
+    ["ž", "pbtdkgfvţḑžxhļčjmnňrlwyř"],
+    ["c", "pbtdkgfvţḑxhļcčjmnňrlwyř"],
+    ["č", "pbtdkgfvţḑxhļčmnňrlwyř"],
+    ["ż", "pbtdkgfvţḑxhļżčjmnňrlwyř"],
+    ["j", "pbtdkgfvţḑxhļjmnňrlwyř"],
+    ["l", "pbtdkgfvţḑszšžçxhļcżčjmnňrlwyř"],
+    ["r", "pbtdkgfvţḑszšžçxhļcżčjmnňrlwy"],
+    ["ř", "pbtdkgfvţḑszšžçxhļcżčjmnňlwyř"],
+    ["m", "pbtdkgfvţḑszšžçxhļcżčjmnňrlwyř"],
+    ["n", "tdkgfvţḑszšžçxhļmnrlwyř"],
+    ["ň", "pbtdfvţḑszšžçhļcżčjmnňrlwř"]
+  ]
+}
