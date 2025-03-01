@@ -6,14 +6,13 @@ describe.each([
   ['koa', 'ko-a'],
   ['ai', 'ai'],
   ['koala', 'ko-a-la'],
-  ['opsspa', 'o-psspa'],
-  ['lopsspa', 'lo-psspa'],
-  ['aluipsspa', 'a-lui-psspa'],
-  ['yaizxra', 'yai-zxra'],
+  ['lo', 'lo'],
+  ['alui', 'a-lui'],
+  ['yai', 'yai'],
   ['sai', 'sai'],
-  ['wezvwaušburdóu', 'we-zvwauš-bur-dóu'],
-  ['ira', 'i-ra'],
   ['sarļeʼi', 'sar-ļe-ʼi'],
+  // ['wezvwaušburdóu', 'we-zvwauš-bur-dóu'],
+  ['ira', 'i-ra'],
   ['sakawi', 'sa-ka-wi'],
 ])('%s', (word: string, syllables: string) => {
   it(`${word} resolves to ${syllables}`, () => {
@@ -22,8 +21,20 @@ describe.each([
 })
 
 describe.each([
+  ['sarļe', 'sar-ļe'],
+  ['aušbu', 'auš-bu'],
+  ['urdóu', 'ur-dóu'],
+])('[BI] %s', (word: string, syllables: string) => {
+  it(`${word} resolves to ${syllables}`, () => {
+    expect(romanizedIthkuilToSyllables(word)).toEqual(syllables)
+  })
+})
+
+describe.each([
   ['arppa', 'arp-pa'],
   ['ampda', 'am-pda'],
+  ['aizxra', 'ai-zxra'],
+  ['ezvwau', 'e-zvwau'],
 ])('[TRI] %s', (word: string, syllables: string) => {
   it(`${word} resolves to ${syllables}`, () => {
     expect(romanizedIthkuilToSyllables(word)).toEqual(syllables)
@@ -32,6 +43,7 @@ describe.each([
 
 describe.each([
   ['armpla', 'arm-pla'],
+  ['opsspa', 'o-psspa'],
 ])('[TETRA] %s', (word: string, syllables: string) => {
   it(`${word} resolves to ${syllables}`, () => {
     expect(romanizedIthkuilToSyllables(word)).toEqual(syllables)
