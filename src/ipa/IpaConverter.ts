@@ -1,5 +1,5 @@
 import { CONVERTION_RULES, IpaConverterMatcher } from './ipa-conversion-rules'
-import { STRESSED_VOWELS_STRING, VOWELS_STRING } from '../phonology'
+import { STRESSED_VOWELS, StressedVowel, VOWELS_STRING } from '../phonology'
 import { IpaConversionError } from './IpaConversionError'
 
 export type IpaConverterOptions = {
@@ -135,7 +135,7 @@ export class IpaConverter {
  * @returns An object containing the characater and a boolean indicating if it was originally a stressed vowel.
 */
 function unstressCharacter(character: string): { character: string, stressed: boolean } {
-  const index = STRESSED_VOWELS_STRING.indexOf(character)
+  const index = STRESSED_VOWELS.indexOf(character as StressedVowel)
   if (index < 0) return { character, stressed: false }
   return { character: VOWELS_STRING[index], stressed: true }
 }

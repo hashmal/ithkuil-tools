@@ -51,6 +51,20 @@ export enum ConsonantCategory {
   Approximant = 1
 }
 
+/** Establish a hierarchy between consonant categories to help with syllable splitting.
+ *
+ * The hierarchy is as follows:
+ *
+ * - Stops
+ * - Fricatives
+ * - Affricates
+ * - Nasals
+ * - Flap/Trill
+ * - Approximants
+ *
+ * @param letter a single consonant letter
+ * @returns the consonant category of the letter
+ */
 export function getConsonantCategory(letter: string): ConsonantCategory | 0 {
   return match(letter)
     .with(P.string.regex(new RegExp(`[${STOPS.join()}]`)), () => ConsonantCategory.Stop)

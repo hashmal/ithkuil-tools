@@ -5,5 +5,8 @@ module.exports = {
     '^.+\\.(ts|tsx)?$': 'ts-jest',
     '^.+\\.(js|jsx)$': 'babel-jest',
   },
-  moduleNameMapper: { '^ipa/(.*)$': '<rootDir>/src/ipa/$1' },
+  moduleNameMapper: {
+    '^ipa/(.*)$': '<rootDir>/src/ipa/$1',
+    '^syllables/(.*)$': '<rootDir>/src/syllables/$1',
+  },
 }
