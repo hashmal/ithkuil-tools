@@ -1,4 +1,4 @@
-import { Consonant, CONSONANTS, Diphthong, DIPHTHONGS, Vowel, VOWELS } from '../phonology'
+import { Diphthong, DIPHTHONGS, STRESSED_VOWELS, Vowel, VOWELS } from '../phonology'
 import { biConsonantalConjunctSplit, pentaConsonantalConjunctSplit, tetraConsonantalConjunctSplit, triConsonantalConjunctSplit } from './onsonantalConjunctSplits'
 
 /** Used to split single words into syllables. */
@@ -48,20 +48,28 @@ export class SyllableSplitter {
       output.push([vowelBefore, consonantSplit, vowelAfter])
     }
     // trailing consonants
-    if (this.word.length > vowelRanges.length) {
-      if (CONSONANTS.includes(this.word[this.word.length-1] as Consonant)) {
-        const consonant = this.word.slice(vowelRanges.length+1, this.word.length)
-        // console.log('trailing consonants:', consonant)
-        output[output.length-1][2] += consonant
-      }
+    if (this.word.length > vowelRanges.length-1) {
+      const length = vowelRanges.length
+      const vowelBefore = this.word.slice(vowelRanges[length-2], vowelRanges[length-1])
+      console.log('vowelBefore:', vowelBefore)
+      const consonant = this.word.slice(vowelRanges[length-1], vowelRanges[length])
+      console.log('trailing consonant:', consonant)
+      // console.log('diff:', this.word.slice(vowelRanges.length, this.word.length))
+
+      // if (CONSONANTS.includes(this.word[this.word.length-1] as Consonant)) {
+      //   const consonant = this.word.slice(vowelRanges.length+1, this.word.length)
+      //   // console.log('trailing consonants:', consonant)
+      //   output[output.length-1][2] += consonant
+      // }
+
+      output.push([vowelBefore, [consonant, ''], ''])
     }
 
     const joined = this.joiner(output)
-    if (joined[0] === '') {
-      return joined.slice(1, joined.length)
-    } else {
-      return joined
-    }
+    let adjustedJoined = joined[0] === '' ? joined.slice(1, joined.length) : joined
+    if (adjustedJoined[adjustedJoined.length-1] === '') adjustedJoined = adjustedJoined = adjustedJoined.slice(0, adjustedJoined.length-1)
+    if (adjustedJoined[adjustedJoined.length-1] === '1') return adjustedJoined
+    return fixWordInitialConsonants(adjustedJoined)
   }
 
   /** Get syllable boundaries in form of an array of indices
@@ -146,6 +154,14 @@ export class SyllableSplitter {
     accum.push(prev)
 
     return accum
+  }
+}
+
+function fixWordInitialConsonants(syllables: string[]): string[] {
+  if (syllables[0].match(`[${VOWELS.join('')}${STRESSED_VOWELS.join('')}]`)) {
+    return syllables
+  } else {
+    return [syllables[0] + syllables[1], ...syllables.slice(2, syllables.length)]
   }
 }
 

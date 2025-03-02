@@ -5,7 +5,7 @@ function split(word: string): string[][] {
 }
 
 describe.each([
-  // cat
+  // Configuration
   ['rrala', 'rra-la'],
   ['rrasa', 'rra-sa'],
   ['rraca', 'rra-ca'],
@@ -13,7 +13,6 @@ describe.each([
   ['rrata', 'rra-ta'],
   ['rraţa', 'rra-ţa'],
   ['rraza', 'rra-za'],
-  // sphere
   ['anzwil', 'an-zwil'],
   ['anzwit', 'an-zwit'],
   ['anzwik', 'an-zwik'],
@@ -21,10 +20,37 @@ describe.each([
   ['anzwif', 'an-zwif'],
   ['anzwiç', 'an-zwiç'],
   ['anzwiž', 'an-zwiž'],
-  // motion
-  ['blöfêi', 'blö-fêi'],
-  ['onţlilu', 'on-ţli-lu'],
   ['blöfêi onţlilu', 'blö-fêi on-ţli-lu'],
+  // Affiliation
+  ['čväţa', 'čvä-ţa'],
+  ['čvälţa', 'čväl-ţa'],
+  ['čvärţa', 'čvär-ţa'],
+  ['čväřţa', 'čväř-ţa'],
+  ['arsweţ', 'ar-sweţ'],
+  ['arswelţ', 'ar-swelţ'],
+  ['arswerţ', 'ar-swerţ'],
+  ['arsweřţ', 'ar-sweřţ'],
+  ['zvata', 'zva-ta'],
+  ['zvalta', 'zval-ta'],
+  ['zvarta', 'zvar-ta'],
+  ['zvařta', 'zvař-ta'],
+  ['sřala', 'sřa-la'],
+  ['sřanļa', 'sřan-ļa'],
+  ['sřarļa', 'sřar-ļa'],
+  ['sřaňa', 'sřa-ňa'],
+  // Perspective
+  ['avsal', 'a-vsal'],
+  ['avsar', 'a-vsar'],
+  ['avsav', 'a-vsav'],
+  ['avsaj', 'a-vsaj'],
+  ['ţrala', 'ţra-la'],
+  ['ţrara', 'ţra-ra'],
+  ['ţrava', 'ţra-va'],
+  ['ţraja', 'ţra-ja'],
+  ['elzaţ', 'el-zaţ'],
+  ['elzaţra', 'el-za-ţra'],
+  ['elzaţwa', 'el-za-ţwa'],
+  ['elzaţya', 'el-za-ţya'],
 ])('%s', (word: string, syllables: string) => {
   it(`resolves to ${syllables}`, () => {
     expect(romanizedIthkuilToSyllables(word)).toEqual(split(syllables))
