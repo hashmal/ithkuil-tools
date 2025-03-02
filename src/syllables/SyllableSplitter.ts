@@ -48,12 +48,12 @@ export class SyllableSplitter {
       output.push([vowelBefore, consonantSplit, vowelAfter])
     }
     // trailing consonants
-    if (this.word.length > vowelRanges.length-1) {
+    if (this.word.length > vowelRanges.length-2) {
       const length = vowelRanges.length
       const vowelBefore = this.word.slice(vowelRanges[length-2], vowelRanges[length-1])
-      console.log('vowelBefore:', vowelBefore)
+      // console.log('vowelBefore:', vowelBefore)
       const consonant = this.word.slice(vowelRanges[length-1], vowelRanges[length])
-      console.log('trailing consonant:', consonant)
+      // console.log('trailing consonant:', consonant)
       // console.log('diff:', this.word.slice(vowelRanges.length, this.word.length))
 
       // if (CONSONANTS.includes(this.word[this.word.length-1] as Consonant)) {
