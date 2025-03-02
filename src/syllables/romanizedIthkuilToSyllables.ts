@@ -7,7 +7,7 @@ import { SyllableSplitter } from './SyllableSplitter'
  */
 export function romanizedIthkuilToSyllables(romanizedIthkuilText: string): string[][] {
   const boundaries = []
-  for (const word of romanizedIthkuilText.split(/\s+/)) {
+  for (const word of romanizedIthkuilText.split(/\s+|-/)) {
     const syllableSplitter = new SyllableSplitter(word)
     boundaries.push(syllableSplitter.splitSyllables())
   }
