@@ -1,4 +1,4 @@
-import { Diphthong, DIPHTHONGS, Vowel, VOWELS } from '../phonology'
+import { Consonant, CONSONANTS, Diphthong, DIPHTHONGS, Vowel, VOWELS } from '../phonology'
 import { biConsonantalConjunctSplit, pentaConsonantalConjunctSplit, tetraConsonantalConjunctSplit, triConsonantalConjunctSplit } from './onsonantalConjunctSplits'
 
 /** Used to split single words into syllables. */
@@ -32,7 +32,8 @@ export class SyllableSplitter {
 
     if (vowelRanges.length === 2) return [this.word]
 
-    for (let index = 0; index < vowelRanges.length-2; index+=2) {
+    let index
+    for (index = 0; index < vowelRanges.length-2; index+=2) {
       const consonant = this.word.slice(vowelRanges[index + 1], vowelRanges[index + 2])
       const consonantLength = consonant.length
       const split = this.consonantSplit(consonant) // consonant resolution here
@@ -45,6 +46,14 @@ export class SyllableSplitter {
 
       // console.log({ vowelBefore, consonantSplit, vowelAfter })
       output.push([vowelBefore, consonantSplit, vowelAfter])
+    }
+    // trailing consonants
+    if (this.word.length > vowelRanges.length) {
+      if (CONSONANTS.includes(this.word[this.word.length-1] as Consonant)) {
+        const consonant = this.word.slice(vowelRanges.length+1, this.word.length)
+        // console.log('trailing consonants:', consonant)
+        output[output.length-1][2] += consonant
+      }
     }
 
     const joined = this.joiner(output)
