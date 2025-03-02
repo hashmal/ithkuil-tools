@@ -1,8 +1,5 @@
 import { romanizedIthkuilToSyllables } from '../../src/syllables/romanizedIthkuilToSyllables'
-
-function split(word: string): string[][] {
-  return word.split(' ').map(s => s.split('-'))
-}
+import { split } from '../helpers'
 
 describe.each([
   // Configuration
