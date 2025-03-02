@@ -9,7 +9,6 @@ export const STRESSED_VOWELS = ['í', 'û', 'ú', 'é', 'ô', 'ê', 'ó', 'â', 
 export type StressedVowel = typeof STRESSED_VOWELS[number]
 
 export const VOWELS_STRING = VOWELS.join('')
-export const STRESSED_VOWELS_STRING = STRESSED_VOWELS.join('')
 
 export const DIPHTHONGS = ['ai', 'ei', 'ëi', 'oi', 'ui', 'au', 'eu', 'ëu', 'ou', 'iu'] as const
 export type Diphthong = typeof DIPHTHONGS[number]
