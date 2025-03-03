@@ -4,7 +4,7 @@ import { IpaConversionError } from './IpaConversionError'
 import { romanizedIthkuilToSyllableBoundaries } from 'syllables/romanizedIthkuilToSyllableBoundaries'
 
 export type IpaConverterOptions = {
-  stressMarks?: 'accent' | 'none',
+  stressMarks?: 'accent' | 'line' | 'none',
   brackets?: boolean,
   fullStopsBetweenVowels?: boolean,
 }
@@ -84,6 +84,12 @@ export class IpaConverter {
         try {
           ipaAccumulator += this.matchCharacter(matcher!)
           if (this.options?.stressMarks === 'accent' && stressed) ipaAccumulator += STRESS_MARK_ACCENT
+          if (this.options?.stressMarks === 'line' && stressed) {
+            const dotMatch = ipaAccumulator.match(/\.[^.]*$/)
+            if (dotMatch) {
+              ipaAccumulator = ipaAccumulator.slice(0, dotMatch!.index!+1) + STRESS_MARK_VERTICAL_LINE + ipaAccumulator.slice(dotMatch!.index!+1)
+            }
+          }
         } catch (error) { if (error instanceof Error) return error }
       }
     }
