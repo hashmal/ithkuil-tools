@@ -6,6 +6,8 @@ import { CONSONANTS, Consonant, VOWELS, Vowel } from '../phonology'
 export type MatcherContext = {
   lb: (length: number) => string,
   la: (length: number) => string,
+  syllablesBoundaries: number[],
+  currentIndex: number,
 }
 
 /** Matcher signature
@@ -96,7 +98,7 @@ export const CONVERTION_RULES: { [key: string]: IpaConverterMatcher } = {
   'h': (ctx) => {
     if (ctx.la(1) === '' && 'ptkcč'.split('').includes(ctx.lb(1))) return 'ʰ'
     if (beginingOfBivocalicConjunct(ctx.la) && ctx.lb(2).match(/[ptkcč]/)) return 'h'
-    if ('ptkcč'.split('').includes(ctx.lb(1))) return 'ʰ' // TODO: apply this rule only at the beginning of a syllable
+    if (ctx.syllablesBoundaries.includes(ctx.currentIndex-2) && 'ptkcč'.split('').includes(ctx.lb(1))) return 'ʰ'
     return 'h'
   },
 

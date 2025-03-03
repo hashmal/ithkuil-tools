@@ -158,6 +158,7 @@ export class SyllableSplitter {
 }
 
 function fixWordInitialConsonants(syllables: string[]): string[] {
+  if (syllables.length === 0) return []
   if (syllables[0].match(`[${VOWELS.join('')}${STRESSED_VOWELS.join('')}]`)) {
     return syllables
   } else {

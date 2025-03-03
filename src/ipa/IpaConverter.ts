@@ -1,6 +1,7 @@
 import { CONVERTION_RULES, IpaConverterMatcher, MatcherContext } from './ipa-conversion-rules'
 import { STRESSED_VOWELS, StressedVowel, VOWELS_STRING } from '../phonology'
 import { IpaConversionError } from './IpaConversionError'
+import { romanizedIthkuilToSyllableBoundaries } from 'syllables/romanizedIthkuilToSyllableBoundaries'
 
 export type IpaConverterOptions = {
   stressMarks?: 'accent' | 'none'
@@ -33,10 +34,13 @@ export class IpaConverter {
 
   /** Romanized Ithkuil text to be converted to IPA */
   private text!: string
+  private words!: string[]
+  private syllablesBoundaries!: number[][]
 
   /** Index used to traverse the romanized Ithkuil text.
    * @internal */
   private index = 0
+  private currentWordIndex = 0
 
   /** Constructor
    *
@@ -45,6 +49,10 @@ export class IpaConverter {
    */
   constructor(romanizedIthkuilText: string, options?: IpaConverterOptions) {
     this.text = this.preprocessText(romanizedIthkuilText)
+    this.words = this.text.split(' ')
+    // console.log(this.text)
+    this.syllablesBoundaries = romanizedIthkuilToSyllableBoundaries(this.text)
+    // console.log(this.syllablesBoundaries)
     this.options = { ...this.DEFAULT_OPTIONS, ...(options ?? {}) }
   }
 
@@ -55,17 +63,21 @@ export class IpaConverter {
   public textToIpa(): string | Error {
     let ipaAccumulator: string = ''
 
-    for (this.index = 0; this.index < this.text.length; this.index++) {
-      const currentCharacter = this.text[this.index]
-      const { character, stressed } = this.unstressCharacter(currentCharacter)
-      let matcher
-      try { matcher = this.lookupCharacterMatcher(character) }
-      catch (error) { if (error instanceof Error) return error }
+    for (this.currentWordIndex = 0; this.currentWordIndex < this.words.length; this.currentWordIndex++) {
+      if (this.currentWordIndex > 0) ipaAccumulator += ' '
+      const word = this.words[this.currentWordIndex]
+      for (this.index = 0; this.index < word.length; this.index++) {
+        const currentCharacter = word[this.index]
+        const { character, stressed } = this.unstressCharacter(currentCharacter)
+        let matcher
+        try { matcher = this.lookupCharacterMatcher(character) }
+        catch (error) { if (error instanceof Error) return error }
 
-      try {
-        ipaAccumulator += this.matchCharacter(matcher!)
-        if (this.options?.stressMarks === 'accent' && stressed) ipaAccumulator += STRESS_MARK_ACCENT
-      } catch (error) { if (error instanceof Error) return error }
+        try {
+          ipaAccumulator += this.matchCharacter(matcher!)
+          if (this.options?.stressMarks === 'accent' && stressed) ipaAccumulator += STRESS_MARK_ACCENT
+        } catch (error) { if (error instanceof Error) return error }
+      }
     }
 
     const ipa = this.geminate(ipaAccumulator).normalize()
@@ -114,6 +126,8 @@ export class IpaConverter {
     return {
       lb: this.lookBehind(),
       la: this.lookAhead(),
+      syllablesBoundaries: this.syllablesBoundaries[this.currentWordIndex],
+      currentIndex: this.index,
     }
   }
 
