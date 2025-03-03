@@ -74,7 +74,7 @@ export class IpaConverter {
         const { character, stressed } = this.unstressCharacter(currentCharacter)
         if (this.options?.fullStopsBetweenVowels === true) {
           if (this.index > 0 && currentSyllableWord.includes(this.index)) {
-            ipaAccumulator += '.'
+            ipaAccumulator += FULLSTOP
           }
         }
         let matcher
