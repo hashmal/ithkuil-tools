@@ -1,4 +1,4 @@
-import { CONVERTION_RULES, IpaConverterMatcher } from './ipa-conversion-rules'
+import { CONVERTION_RULES, IpaConverterMatcher, MatcherContext } from './ipa-conversion-rules'
 import { STRESSED_VOWELS, StressedVowel, VOWELS_STRING } from '../phonology'
 import { IpaConversionError } from './IpaConversionError'
 
@@ -12,6 +12,8 @@ export type IpaConverterOptions = {
  * @remarks The representation of the stress mark is a combining acute accent, which means normalizing the string will be necessary to obtain in a single character.
  */
 const STRESS_MARK_ACCENT = '\u0301'
+const STRESS_MARK_VERTICAL_LINE = 'ˈ'
+const FULLSTOP = '.'
 
 /** Class to convert romanized Ithkuil text to IPA. Using the utility function `romanizedIthkuilToIpa` should be preferred, as it covers the same functionality with less verbosity,
  *
@@ -21,13 +23,13 @@ export class IpaConverter {
   // TODO: Implement stress marks as vertical lines.
 
   /** Default options for the converter, to be overwwritten with explicitly given options. */
-  private DEFAULT_OPTIONS: IpaConverterOptions = {
+  protected DEFAULT_OPTIONS: IpaConverterOptions = {
     stressMarks: 'accent',
     brackets: true,
   }
 
   /** Current options for the converter, based on `DEFAULT_OPTIONS` merged with passed options */
-  private options!: IpaConverterOptions
+  protected options!: IpaConverterOptions
 
   /** Romanized Ithkuil text to be converted to IPA */
   private text!: string
@@ -42,7 +44,7 @@ export class IpaConverter {
    * @param options Options for the conversion.
    */
   constructor(romanizedIthkuilText: string, options?: IpaConverterOptions) {
-    this.text = preprocessText(romanizedIthkuilText)
+    this.text = this.preprocessText(romanizedIthkuilText)
     this.options = { ...this.DEFAULT_OPTIONS, ...(options ?? {}) }
   }
 
@@ -55,7 +57,7 @@ export class IpaConverter {
 
     for (this.index = 0; this.index < this.text.length; this.index++) {
       const currentCharacter = this.text[this.index]
-      const { character, stressed } = unstressCharacter(currentCharacter)
+      const { character, stressed } = this.unstressCharacter(currentCharacter)
       let matcher
       try { matcher = this.lookupCharacterMatcher(character) }
       catch (error) { if (error instanceof Error) return error }
@@ -66,7 +68,7 @@ export class IpaConverter {
       } catch (error) { if (error instanceof Error) return error }
     }
 
-    const ipa = geminate(ipaAccumulator).normalize()
+    const ipa = this.geminate(ipaAccumulator).normalize()
 
     return this.optionalBrackets(ipa)
   }
@@ -94,7 +96,7 @@ export class IpaConverter {
    * @throws IpaConversionError if the matcher logic fails to produce an IPA character.
    */
   private matchCharacter(matcher: IpaConverterMatcher): string {
-    const ipaCharacter: string | undefined = matcher!(this.lookBehind(), this.lookAhead())
+    const ipaCharacter: string | undefined = matcher!(this.context())
     if (ipaCharacter) return ipaCharacter
     throw new IpaConversionError(this.failureMessage, { cause: 'incomplete rules' })
   }
@@ -108,15 +110,22 @@ export class IpaConverter {
     return this.options.brackets ? `[${ipa}]` : ipa
   }
 
+  context(): MatcherContext {
+    return {
+      lb: this.lookBehind(),
+      la: this.lookAhead(),
+    }
+  }
+
   /** Build a lookahead closure for a matcher.
    * @internal */
-  private lookAhead(): (length: number) => string {
+  protected lookAhead(): (length: number) => string {
     return (length) => (this.text.slice(this.index + 1, this.index + 1 + length))
   }
 
   /** Build a lookbehind closure for a matcher.
    * @internal */
-  private lookBehind(): (length: number) => string {
+  protected lookBehind(): (length: number) => string {
     return (length) => (this.text.slice(this.index - length, this.index))
   }
 
@@ -127,44 +136,44 @@ export class IpaConverter {
       `${this.text}\n` +
       '-'.repeat(this.index) + '^'
   }
-}
 
-/** Get a vowel without a stress mark along the information if it was originally stressed.
- *
- * @param character The character to get the unstressed vowel from.
- * @returns An object containing the characater and a boolean indicating if it was originally a stressed vowel.
-*/
-function unstressCharacter(character: string): { character: string, stressed: boolean } {
-  const index = STRESSED_VOWELS.indexOf(character as StressedVowel)
-  if (index < 0) return { character, stressed: false }
-  return { character: VOWELS_STRING[index], stressed: true }
-}
+  /** Geminate consonants in a given IPA string.
+  *
+  * @param ipa The IPA string to geminate consonants in.
+  * @returns The IPA string with geminated consonants.
+  */
+  protected geminate(ipa: string): string {
+    const geminated = ipa
+      .replace(/(.)(?<!\1.)\1(?!\1)/g, '$1ː') // Geminate consonants
+      .replace(/ɹɾ/g, 'ʀ') // [ɹ] / [ɾ] becomes a trill [r] when geminated, as in Spanish or Italian caro and carro;
+      .replace(/ʁʁ/g, 'ʁː') // [ʁ] When geminated it is either [ʁː] or can be strengthened to a uvular trill [ʀ]
 
-/** Preprocess a given text for IPA conversion.
- *
- * @param text The text to preprocess.
- * @returns The preprocessed text.
- */
-function preprocessText(text: string): string {
-  return text
-    .toLowerCase() // Make everything lowercase
-    .replace(/\.|,/g, ' ') // Remove punctuation
-    .replace(/\s+/g, ' ') // Remove extra spaces
-    .replace(/^\s+/, '') // Remove leading spaces
-    .replace(/\s+$/, '') // Remove trailing spaces
-    .replace(/'/, 'ʼ') // Replace apostrophes with glottal stops
-}
+    return geminated
+  }
 
-/** Geminate consonants in a given IPA string.
- *
- * @param ipa The IPA string to geminate consonants in.
- * @returns The IPA string with geminated consonants.
- */
-function geminate(ipa: string): string {
-  const geminated = ipa
-    .replace(/(.)(?<!\1.)\1(?!\1)/g, '$1ː') // Geminate consonants
-    .replace(/ɹɾ/g, 'ʀ') // [ɹ] / [ɾ] becomes a trill [r] when geminated, as in Spanish or Italian caro and carro;
-    .replace(/ʁʁ/g, 'ʁː') // [ʁ] When geminated it is either [ʁː] or can be strengthened to a uvular trill [ʀ]
+  /** Get a vowel without a stress mark along the information if it was originally stressed.
+  *
+  * @param character The character to get the unstressed vowel from.
+  * @returns An object containing the characater and a boolean indicating if it was originally a stressed vowel.
+  */
+  protected unstressCharacter(character: string): { character: string, stressed: boolean } {
+    const index = STRESSED_VOWELS.indexOf(character as StressedVowel)
+    if (index < 0) return { character, stressed: false }
+    return { character: VOWELS_STRING[index], stressed: true }
+  }
 
-  return geminated
+  /** Preprocess a given text for IPA conversion.
+  *
+  * @param text The text to preprocess.
+  * @returns The preprocessed text.
+  */
+  protected preprocessText(text: string): string {
+    return text
+      .toLowerCase() // Make everything lowercase
+      .replace(/\.|,/g, ' ') // Remove punctuation
+      .replace(/\s+/g, ' ') // Remove extra spaces
+      .replace(/^\s+/, '') // Remove leading spaces
+      .replace(/\s+$/, '') // Remove trailing spaces
+      .replace(/'/, 'ʼ') // Replace apostrophes with glottal stops
+  }
 }

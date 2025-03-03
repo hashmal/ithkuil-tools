@@ -1,8 +1,16 @@
 import { CONSONANTS, Consonant, VOWELS, Vowel } from '../phonology'
 
+
+/** Context for a matcher function
+ * @internal */
+export type MatcherContext = {
+  lb: (length: number) => string,
+  la: (length: number) => string,
+}
+
 /** Matcher signature
  * @internal */
-export type IpaConverterMatcher = (lb: (length: number) => string, la: (length: number) => string) => string | undefined
+export type IpaConverterMatcher = (ctx: MatcherContext) => string | undefined
 
 /** Utility function to check if a character is followed by a vowel.
  *
@@ -11,6 +19,10 @@ export type IpaConverterMatcher = (lb: (length: number) => string, la: (length: 
  */
 function beginingOfBivocalicConjunct(la: (n: number) => string): boolean {
   return VOWELS.indexOf(la(1) as Vowel) >= 0
+}
+
+function followingAVowel(lb: (n: number) => string): boolean {
+  return VOWELS.indexOf(lb(1) as Vowel) >= 0
 }
 
 /** Utility function to check if a character is followed by a consonant.
@@ -30,107 +42,109 @@ export const CONVERTION_RULES: { [key: string]: IpaConverterMatcher } = {
 
   // SPECIAL CHARACTERS
 
-  ' ': (_lb, _la) => (' '),
-  '-': (_lb, _la) => ('-'),
+  ' ': (_ctx) => (' '),
+  '-': (_ctx) => ('-'),
 
   // VOWELS
 
-  'a': (_lb, _la) => ('a'),
+  'a': (_ctx) => ('a'),
 
-  'ä': (_lb, _la) => ('æ'),
+  'ä': (_ctx) => ('æ'),
 
-  'e': (_lb, la) => {
-    if (beginingOfBivocalicConjunct(la)) return 'e'
+  'e': (ctx) => {
+    if (beginingOfBivocalicConjunct(ctx.la)) return 'e'
     return 'ɛ'
   },
 
-  'ë': (_lb, _la) => ('ʌ'),
+  'ë': (_ctx) => ('ʌ'),
 
-  'i': (lb, la) => {
-    if (beginingOfBivocalicConjunct(la)) return 'i'
-    if (lb(1) === 'y' || la(1) === 'y') return 'ɪ'
+  'i': (ctx) => {
+    if (beginingOfBivocalicConjunct(ctx.la)) return 'i'
+    if (ctx.lb(1) === 'y' || ctx.la(1) === 'y') return 'ɪ'
     return 'i'
   },
 
-  'o': (_lb, la) => {
-    if (beginingOfBivocalicConjunct(la)) return 'o'
+  'o': (ctx) => {
+    if (beginingOfBivocalicConjunct(ctx.la)) return 'o'
     return 'ɔ'
   },
 
-  'ö': (_lb, la) => {
-    if (beginingOfBivocalicConjunct(la)) return 'ø'
+  'ö': (ctx) => {
+    if (beginingOfBivocalicConjunct(ctx.la)) return 'ø'
     return 'œ'
   },
 
-  'u': (lb, la) => {
-    if (beginingOfBivocalicConjunct(la)) return 'u'
-    if (lb(1) === 'w' || la(1) === 'w') return 'ʊ'
+  'u': (ctx) => {
+    if (beginingOfBivocalicConjunct(ctx.la)) return 'u'
+    if (ctx.lb(1) === 'w' || ctx.la(1) === 'w') return 'ʊ'
     return 'u'
   },
 
-  'ü': (lb, _la) => {
-    if ('yw'.indexOf(lb(1)) >= 0 && lb(1).length > 0) return 'ʉ'
+  'ü': (ctx) => {
+    if ('yw'.indexOf(ctx.lb(1)) >= 0 && ctx.lb(1).length > 0) return 'ʉ'
     return 'y'
   },
 
   // CONSONANTS
 
-  'p': (_lb, _la) => ('p'),
-  'k': (_lb, _la) => ('k'),
-  't': (_lb, _la) => ('t̪'),
-  'd': (_lb, _la) => ('d̪'),
-  'g': (_lb, _la) => ('g'),
+  'p': (_ctx) => ('p'),
+  'k': (_ctx) => ('k'),
+  't': (_ctx) => ('t̪'),
+  'd': (_ctx) => ('d̪'),
+  'g': (_ctx) => ('g'),
 
-  'h': (lb, la) => {
-    if (la(1) === '' && 'ptkcč'.split('').includes(lb(1))) return 'ʰ'
+  'h': (ctx) => {
+    if (ctx.la(1) === '' && 'ptkcč'.split('').includes(ctx.lb(1))) return 'ʰ'
+    if (beginingOfBivocalicConjunct(ctx.la) && ctx.lb(2).match(/[ptkcč]/)) return 'h'
+    if ('ptkcč'.split('').includes(ctx.lb(1))) return 'ʰ' // TODO: apply this rule only at the beginning of a syllable
     return 'h'
   },
 
-  'ʼ': (_lb, _la) => ('Ɂ'),
+  'ʼ': (_ctx) => ('Ɂ'),
 
-  'ţ': (_lb, _la) => ('θ'),
-  'ḑ': (_lb, _la) => ('ð'),
+  'ţ': (_ctx) => ('θ'),
+  'ḑ': (_ctx) => ('ð'),
 
-  'š': (_lb, _la) => ('ʃ'),
-  'ž': (_lb, _la) => ('ʒ'),
+  'š': (_ctx) => ('ʃ'),
+  'ž': (_ctx) => ('ʒ'),
 
-  'ç': (_lb, _la) => ('ç'),
+  'ç': (_ctx) => ('ç'),
 
-  'x': (_lb, _la) => ('x'),
+  'x': (_ctx) => ('x'),
 
-  'l': (_lb, _la) => ('l̪'),
+  'l': (_ctx) => ('l̪'),
 
-  'ļ': (_lb, _la) => ('ɬ'),
+  'ļ': (_ctx) => ('ɬ'),
 
-  'c': (_lb, _la) => ('ts'),
-  'ẓ': (_lb, _la) => ('dz'),
+  'c': (_ctx) => ('ts'),
+  'ẓ': (_ctx) => ('dz'),
 
-  'č': (_lb, _la) => ('tʃ'),
-  'j': (_lb, _la) => ('dʒ'),
+  'č': (_ctx) => ('tʃ'),
+  'j': (_ctx) => ('dʒ'),
 
-  'n': (_lb, la) => {
-    const la1 = la(1)
+  'n': (ctx) => {
+    const la1 = ctx.la(1)
     if (la1 === 'ř') return 'n'
     if ('kgx'.split('').includes(la1)) return 'ŋ'
     return 'n'
   },
 
-  'ň': (_lb, _la) => ('ŋ'),
+  'ň': (_ctx) => ('ŋ'),
 
-  'r': (_lb, la) => {
-    if (followedByAConsonant(la)) return 'ɹ'
+  'r': (ctx) => {
+    if (followedByAConsonant(ctx.la)) return 'ɹ'
     return 'ɾ'
   },
 
-  'ř': (_lb, _la) => ('ʁ'),
+  'ř': (_ctx) => ('ʁ'),
 
-  'y': (_lb, _la) => ('j'),
+  'y': (_ctx) => ('j'),
 
-  'b': (_lb, _la) => ('b'),
-  'f': (_lb, _la) => ('f'),
-  'm': (_lb, _la) => ('m'),
-  's': (_lb, _la) => ('s'),
-  'v': (_lb, _la) => ('v'),
-  'w': (_lb, _la) => ('w'),
-  'z': (_lb, _la) => ('z'),
+  'b': (_ctx) => ('b'),
+  'f': (_ctx) => ('f'),
+  'm': (_ctx) => ('m'),
+  's': (_ctx) => ('s'),
+  'v': (_ctx) => ('v'),
+  'w': (_ctx) => ('w'),
+  'z': (_ctx) => ('z'),
 }

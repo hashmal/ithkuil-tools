@@ -130,7 +130,20 @@ describe('h', () => {
     expect(ipa('čh')).toEqual('tʃʰ')
   })
 
-  it.todo('handle syllable-initial -ph-, -th-, -kh-, -ch-, -čh- to be pronounced as aspirated stops/affricates [pʰ, t̪ʰ, kʰ, tsʰ, tʃʰ], unless between two vowels')
+  it('is pronounced [ʰ] in syllable-initial position after p, t, k, c, and č, unless between two vowels', () => {
+    expect(ipa('aphm')).toEqual('apʰm')
+    expect(ipa('athm')).toEqual('at̪ʰm')
+    expect(ipa('akhm')).toEqual('akʰm')
+    expect(ipa('achm')).toEqual('atsʰm')
+    expect(ipa('ačhm')).toEqual('atʃʰm')
+
+    expect(ipa('apha')).toEqual('apha')
+    expect(ipa('atha')).toEqual('at̪ha')
+    expect(ipa('akha')).toEqual('akha')
+    expect(ipa('acha')).toEqual('atsha')
+    expect(ipa('ačha')).toEqual('atʃha')
+  })
+
   it.todo('handle the possibility of single voiceless consonants: hl = [ɬ], hr = [ɾ̥], hm = [m̥], hn = [n̥]')
 })
 
