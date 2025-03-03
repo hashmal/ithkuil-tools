@@ -4,8 +4,9 @@ import { IpaConversionError } from './IpaConversionError'
 import { romanizedIthkuilToSyllableBoundaries } from 'syllables/romanizedIthkuilToSyllableBoundaries'
 
 export type IpaConverterOptions = {
-  stressMarks?: 'accent' | 'none'
-  brackets?: boolean
+  stressMarks?: 'accent' | 'none',
+  brackets?: boolean,
+  fullStopsBetweenVowels?: boolean,
 }
 
 /** Accent to mark stress on an IPA character
@@ -27,6 +28,7 @@ export class IpaConverter {
   protected DEFAULT_OPTIONS: IpaConverterOptions = {
     stressMarks: 'accent',
     brackets: true,
+    fullStopsBetweenVowels: false,
   }
 
   /** Current options for the converter, based on `DEFAULT_OPTIONS` merged with passed options */
@@ -65,10 +67,16 @@ export class IpaConverter {
 
     for (this.currentWordIndex = 0; this.currentWordIndex < this.words.length; this.currentWordIndex++) {
       if (this.currentWordIndex > 0) ipaAccumulator += ' '
+      const currentSyllableWord = this.syllablesBoundaries[this.currentWordIndex]
       const word = this.words[this.currentWordIndex]
       for (this.index = 0; this.index < word.length; this.index++) {
         const currentCharacter = word[this.index]
         const { character, stressed } = this.unstressCharacter(currentCharacter)
+        if (this.options?.fullStopsBetweenVowels === true) {
+          if (this.index > 0 && currentSyllableWord.includes(this.index)) {
+            ipaAccumulator += '.'
+          }
+        }
         let matcher
         try { matcher = this.lookupCharacterMatcher(character) }
         catch (error) { if (error instanceof Error) return error }
