@@ -14,7 +14,7 @@ describe('" "', () => {
   })
 })
 
-describe.skip('-', () => {
+describe('-', () => {
   it('is a hyphen: silent concatenation character', () => {
     expect(ipa('-')).toEqual('-')
   })
