@@ -43,8 +43,8 @@ export type Approximant = typeof APPROXIMANTS[number]
 
 export enum ConsonantCategory {
   Stop = 6,
-  Fricative = 5,
-  Affricate = 4,
+  Affricate = 5,
+  Fricative = 4,
   Nsaal = 3,
   FlapTrill = 2,
   Approximant = 1
@@ -67,8 +67,8 @@ export enum ConsonantCategory {
 export function getConsonantCategory(letter: string): ConsonantCategory | 0 {
   return match(letter)
     .with(P.string.regex(new RegExp(`[${STOPS.join()}]`)), () => ConsonantCategory.Stop)
-    .with(P.string.regex(new RegExp(`[${FRICATIVES.join()}]`)), () => ConsonantCategory.Fricative)
     .with(P.string.regex(new RegExp(`[${AFFRICATES.join()}]`)), () => ConsonantCategory.Affricate)
+    .with(P.string.regex(new RegExp(`[${FRICATIVES.join()}]`)), () => ConsonantCategory.Fricative)
     .with(P.string.regex(new RegExp(`[${NASALS.join()}]`)), () => ConsonantCategory.Nsaal)
     .with(P.string.regex(new RegExp(`[${FLAP_TRILL.join()}]`)), () => ConsonantCategory.FlapTrill)
     .with(P.string.regex(new RegExp(`[${APPROXIMANTS.join()}]`)), () => ConsonantCategory.Approximant)
