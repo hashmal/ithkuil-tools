@@ -47,3 +47,33 @@ import {
 console.log(romanizedIthkuilToSyllables("Wezvwaušburdóu yaizxra sai")); // [ [ 'we', 'zvwauš', 'bur', 'dóu' ], [ 'yai', 'zxra' ], [ 'sai' ] ]
 console.log(romanizedIthkuilToSyllableBoundaries("Wezvwaušburdóu yaizxra sai")) // [ [ 0, 2, 8, 11, 14 ], [ 0, 3, 7 ], [ 0, 3 ] ]
 ```
+
+### IPA-to-Speech (Experimental)
+
+IPA to speech is using AWS Polly behind the scenes, so you'll need to authenticate:
+
+```typescript
+import { IpaToSpeech } from 'ithkuil-tools'
+
+const ipaToSpeech = new IpaToSpeech({
+  credentials: {
+    accessKeyId: 'accessKeyId',
+    secretAccessKey: 'secretAccessKey',
+  },
+  region: 'region',
+})
+```
+
+Use the `speak` method, passing in some IPA text, to get a buffer containg the corresponding audio. Remember this is an async function returning a promise, so use it accordingly.
+
+The following example should get you started, it saves the audio to an MP3 file:
+
+```typescript
+import * as fs from 'fs'
+
+ipaToSpeech.speak('hɛˈloʊ wɝld')
+  .then((buffer) => {
+    fs.writeFileSync('hello_world.mp3', buffer)
+    console.log(`Audio saved to file.`)
+  })
+```
