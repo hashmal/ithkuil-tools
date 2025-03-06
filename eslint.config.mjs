@@ -18,6 +18,7 @@ export default [
     plugins: { stylistic: StylisticPlugin },
     rules: {
       'no-extra-boolean-cast': 'off',
+      'no-useless-catch': 'off',
       '@typescript-eslint/no-implicit-any': 'off',
       '@typescript-eslint/no-explicit-any': ['warn', { ignoreRestArgs: true }],
       '@typescript-eslint/no-unused-vars': [
