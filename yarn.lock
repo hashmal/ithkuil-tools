@@ -4427,6 +4427,11 @@ queue-microtask@^1.2.2:
   resolved "https://registry.yarnpkg.com/queue-microtask/-/queue-microtask-1.2.3.tgz#4929228bbc724dfac43e0efb058caf7b6cfb6243"
   integrity sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
 
+random@^5.3.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/random/-/random-5.3.0.tgz#c93ef9552ce345dbcfb05304a520b05f27cc49d1"
+  integrity sha512-Gm/L+xTpi1V+//XbnTnvRRlSsbHxJv+AeC1RzqaFLbWwXL8m+bvf6iM0+M+yQoAH8dmcWcZHmP/VZtOu5Zk2DQ==
+
 react-is@^18.0.0:
   version "18.3.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.3.1.tgz#e83557dc12eae63a99e003a46388b1dcbb44db7e"

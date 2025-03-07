@@ -1,5 +1,5 @@
 {
-  "permissibleTriConsonantalConjunctsWhichCanBeRootsOrAffixes": [
+  "triConsonantalConjuncts": [
     ["rř", "p", "ptkdgfţxsšvḍzžcčżjmnlrwyhļřç"],
     ["l", "p", "ptkdgfţxsšḍcčżjmnlrwyhļřç"],
     ["m", "p", "dgmnlrwyhļřç"],

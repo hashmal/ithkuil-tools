@@ -1,5 +1,5 @@
 {
-  "permissibleTetraConsonantalConjunctsWhichCanBeRoots": [
+  "tetraConsonantalConjuncts": [
     ["rřl", "m", "p", "mnlrwyhļřç"],
     ["rř", "ň", "p", "ţlrwyļřhç"],
     ["rřl", "pktcčgdżjzž", "p", "fţsšlrwyļřhç"],
