@@ -51,7 +51,7 @@ describe.each([
   ['arppa', 'arp-pa'],
   ['ampda', 'am-pda'],
   ['aizxra', 'ai-zxra'],
-  ['ezvwau', 'e-zvwau'],
+  ['ezvwau', 'ez-vwau'],
 ])('[TRI] %s', (word: string, syllables: string) => {
   it(`resolves to ${syllables}`, () => {
     expect(romanizedIthkuilToSyllables(word)).toEqual(split(syllables))

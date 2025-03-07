@@ -5,14 +5,12 @@ export function biConsonantalConjunctSplit(consonants: string): number {
   if (consonants.match(/^[ptkcč]h$/)) return 1
 
   // Geminable Stops
-  const stopsGeminables = new RegExp(`([${STOPS_GEMINABLES.join('')}])\\1`)
-  const stopGeminableMatch = consonants.match(stopsGeminables)
-  if (stopGeminableMatch) return stopGeminableMatch.index! + 1
+  const stopGeminationsSplit = geminatedStop(consonants)
+  if (stopGeminationsSplit) return stopGeminationsSplit
 
-  // Geminable Continuants
-  const continuantsGeminables = new RegExp(`([${CONTINUANT_GEMINABLES.join('')}])\\1`)
-  const continuantGeminableMatch = consonants.match(continuantsGeminables)
-  if (continuantGeminableMatch) return continuantGeminableMatch.index! + 2
+  // Geminable continuants
+  const continuantGemiinationSplit = geminatedContinuant(consonants)
+  if (continuantGemiinationSplit) return continuantGemiinationSplit
 
   // General rules
   return checkConsonantStrengthRecursively(consonants)
@@ -20,23 +18,38 @@ export function biConsonantalConjunctSplit(consonants: string): number {
 
 export function triConsonantalConjunctSplit(consonants: string): number {
   // Geminable Stops
-  const stopsGeminables = new RegExp(`([${STOPS_GEMINABLES.join('')}])\\1`)
-  const stopGeminableMatch = consonants.match(stopsGeminables)
-  if (stopGeminableMatch) return stopGeminableMatch.index! + 1
+  const stopGeminationsSplit = geminatedStop(consonants)
+  if (stopGeminationsSplit) return stopGeminationsSplit
 
+  // NOTE: tri-consonantal conjuncts should not need rules for continuant geminables
+
+  // General rules
   return checkConsonantStrengthRecursively(consonants)
 }
 
 export function tetraConsonantalConjunctSplit(consonants: string): number {
-  // Geminable Continuants
-  const continuantsGeminables = new RegExp(`([${CONTINUANT_GEMINABLES.join('')}])\\1`)
-  const continuantGeminableMatch = consonants.match(continuantsGeminables)
-  if (continuantGeminableMatch) return continuantGeminableMatch.index! + 2
+  // Geminable Stops
+  const stopGeminationsSplit = geminatedStop(consonants)
+  if (stopGeminationsSplit) return stopGeminationsSplit
 
+  // Geminable continuants
+  const continuantGemiinationSplit = geminatedContinuant(consonants)
+  if (continuantGemiinationSplit) return continuantGemiinationSplit
+
+  // General rules
   return checkConsonantStrengthRecursively(consonants)
 }
 
 export function pentaConsonantalConjunctSplit(consonants: string): number {
+  // Geminable Stops
+  const stopGeminationsSplit = geminatedStop(consonants)
+  if (stopGeminationsSplit) return stopGeminationsSplit
+
+  // Geminable continuants
+  const continuantGemiinationSplit = geminatedContinuant(consonants)
+  if (continuantGemiinationSplit) return continuantGemiinationSplit
+
+  // General rules
   return checkConsonantStrengthRecursively(consonants)
 }
 
@@ -54,4 +67,16 @@ function checkConsonantStrengthRecursively(consonants: string, index=0): number 
   } else {
     return index
   }
+}
+
+function geminatedStop(consonants: string): number | undefined {
+  const geminatedStop = new RegExp(`([${STOPS_GEMINABLES.join('')}])\\1`)
+  const geminatedStopMatch = consonants.match(geminatedStop)
+  if (geminatedStopMatch) return geminatedStopMatch.index! + 1
+}
+
+function geminatedContinuant(consonants: string): number | undefined {
+  const geminatedContinuant = new RegExp(`([${CONTINUANT_GEMINABLES.join('')}])\\1`)
+  const geminatedContinuantMatch = consonants.match(geminatedContinuant)
+  if (geminatedContinuantMatch) return geminatedContinuantMatch.index! + 2
 }

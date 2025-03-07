@@ -46,6 +46,12 @@ export type Stop = typeof STOPS[number]
 export const FRICATIVES = ['f', 'v', 'ţ', 'ḑ', 's', 'z', 'š', 'ž', 'ç', 'x', 'h', 'ļ'] as const
 export type Fricative = typeof FRICATIVES[number]
 
+export const LABIODENTAL_FRICATIVES = ['f', 'v'] as const
+export type LabiodentalFricative = typeof LABIODENTAL_FRICATIVES[number]
+
+export const PALATAL_FRICATIVES = ['ç'] as const
+export type PalatalFricative = typeof PALATAL_FRICATIVES[number]
+
 export const AFFRICATES = ['c', 'ẓ', 'č', 'j'] as const
 export type Affricate = typeof AFFRICATES[number]
 
@@ -61,6 +67,8 @@ export type Approximant = typeof APPROXIMANTS[number]
 export enum ConsonantCategory {
   Stop = 6,
   Affricate = 5,
+  LabiodentalFricative = 4.8,
+  PalatalFricative = 4.4,
   Fricative = 4,
   Nsaal = 3,
   FlapTrill = 2,
@@ -83,11 +91,21 @@ export enum ConsonantCategory {
  */
 export function getConsonantCategory(letter: string): ConsonantCategory | 0 {
   return match(letter)
-    .with(P.string.regex(new RegExp(`[${STOPS.join()}]`)), () => ConsonantCategory.Stop)
-    .with(P.string.regex(new RegExp(`[${AFFRICATES.join()}]`)), () => ConsonantCategory.Affricate)
-    .with(P.string.regex(new RegExp(`[${FRICATIVES.join()}]`)), () => ConsonantCategory.Fricative)
-    .with(P.string.regex(new RegExp(`[${NASALS.join()}]`)), () => ConsonantCategory.Nsaal)
-    .with(P.string.regex(new RegExp(`[${FLAP_TRILL.join()}]`)), () => ConsonantCategory.FlapTrill)
-    .with(P.string.regex(new RegExp(`[${APPROXIMANTS.join()}]`)), () => ConsonantCategory.Approximant)
+    .with(P.string.regex(new RegExp(`[${STOPS.join()}]`)),
+      () => ConsonantCategory.Stop)
+    .with(P.string.regex(new RegExp(`[${AFFRICATES.join()}]`)),
+      () => ConsonantCategory.Affricate)
+    .with(P.string.regex(new RegExp(`[${LABIODENTAL_FRICATIVES.join()}]`)),
+      () => ConsonantCategory.LabiodentalFricative)
+    .with(P.string.regex(new RegExp(`[${PALATAL_FRICATIVES.join()}]`)),
+      () => ConsonantCategory.PalatalFricative)
+    .with(P.string.regex(new RegExp(`[${FRICATIVES.join()}]`)),
+      () => ConsonantCategory.Fricative)
+    .with(P.string.regex(new RegExp(`[${NASALS.join()}]`)),
+      () => ConsonantCategory.Nsaal)
+    .with(P.string.regex(new RegExp(`[${FLAP_TRILL.join()}]`)),
+      () => ConsonantCategory.FlapTrill)
+    .with(P.string.regex(new RegExp(`[${APPROXIMANTS.join()}]`)),
+      () => ConsonantCategory.Approximant)
     .otherwise(() => 0)
 }
