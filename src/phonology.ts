@@ -8,8 +8,6 @@ export type Vowel = typeof VOWELS[number]
 export const STRESSED_VOWELS = ['í', 'û', 'ú', 'é', 'ô', 'ê', 'ó', 'â', 'á'] as const
 export type StressedVowel = typeof STRESSED_VOWELS[number]
 
-export const VOWELS_STRING = VOWELS.join('')
-
 export const DIPHTHONGS = ['ai', 'ei', 'ëi', 'oi', 'ui', 'au', 'eu', 'ëu', 'ou', 'iu'] as const
 export type Diphthong = typeof DIPHTHONGS[number]
 
@@ -22,6 +20,25 @@ export const CONSONANTS = [
   'w', 'r', 'y', 'ř', 'l',
 ] as const
 export type Consonant = typeof CONSONANTS[number]
+
+
+// GEMINABLES
+
+export const BETWEEN_VOWELS_GEMINABLES = [
+  'p' , 'b' , 'm' , 't' , 'd' , 'n' , 'k' , 'g' , 'ň' ,
+  'f' , 'v' , 'ţ' , 'ḑ' , 's' , 'z' , 'c' , 'ẓ' , 'š' , 'ž' , 'č' , 'j' , 'ç' , 'x' , 'h' , 'ļ',
+  'r' , 'ř' , 'l', // all but 'w', 'y' and 'ʼ'
+] as const
+export type BetweenVowelsGeminable = typeof BETWEEN_VOWELS_GEMINABLES[number]
+
+export const CONTINUANT_GEMINABLES = ['ç', 'ḑ', 'f', 'h', 'l', 'ļ', 'm', 'n', 'ň', 'ř', 's', 'š', 'ţ', 'v', 'x', 'z', 'ž'] as const // add 'r'?
+export type ContinuantGeminable = typeof CONTINUANT_GEMINABLES[number]
+
+export const STOPS_GEMINABLES = ['b', 'd', 'g', 'k', 'p', 't'] as const
+export type StopGeminable = typeof STOPS_GEMINABLES[number]
+
+
+// CONSONANT CATEGORIES
 
 export const STOPS = ['p', 'b', 't', 'd', 'k', 'g', 'ʼ'] as const
 export type Stop = typeof STOPS[number]
@@ -74,30 +91,3 @@ export function getConsonantCategory(letter: string): ConsonantCategory | 0 {
     .with(P.string.regex(new RegExp(`[${APPROXIMANTS.join()}]`)), () => ConsonantCategory.Approximant)
     .otherwise(() => 0)
 }
-
-// GEMINATION
-
-export const BETWEEN_VOWELS_GEMINABLES = [
-  'p' , 'b' , 'm' , 't' , 'd' , 'n' , 'k' , 'g' , 'ň' ,
-  'f' , 'v' , 'ţ' , 'ḑ' , 's' , 'z' , 'c' , 'ẓ' , 'š' , 'ž' , 'č' , 'j' , 'ç' , 'x' , 'h' , 'ļ',
-  'r' , 'ř' , 'l', // all but 'w', 'y' and 'ʼ'
-] as const
-export type BetweenVowelsGeminable = typeof BETWEEN_VOWELS_GEMINABLES[number]
-
-export const CONTINUANT_GEMINABLES = ['ç', 'ḑ', 'f', 'h', 'l', 'ļ', 'm', 'n', 'ň', 'ř', 's', 'š', 'ţ', 'v', 'x', 'z', 'ž'] as const // add 'r'?
-export type ContinuantGeminable = typeof CONTINUANT_GEMINABLES[number]
-
-export const STOPS_GEMINABLES = ['b', 'd', 'g', 'k', 'p', 't'] as const
-export type StopGeminable = typeof STOPS_GEMINABLES[number]
-
-
-/* STRESS NOTATION
-
-Though not part of normal orthography, a number of devices exist that are used by linguists and others to indicate the position of stress (and syllabification in some cases) when it is desirable to do so. Some of these are listed here.
-
-- Most commonly, the stress mark is placed before the beginning of the stressed syllable, where a syllable is definable. However, it is occasionally placed immediately before the vowel.[20] In the International Phonetic Alphabet (IPA), primary stress is indicated by a high vertical line (primary stress mark: ˈ) before the stressed element, secondary stress by a low vertical line (secondary stress mark: ˌ). For example, [sɪˌlæbəfɪˈkeɪʃən] or /sɪˌlæbəfɪˈkeɪʃən/. Extra stress can be indicated by doubling the symbol: ˈˈ◌.
-
-- Linguists frequently mark primary stress with an acute accent over the vowel, and secondary stress by a grave accent. Example: [sɪlæ̀bəfɪkéɪʃən] or /sɪlæ̀bəfɪkéɪʃən/. That has the advantage of not requiring a decision about syllable boundaries.
-
-(Source: Wikipedia)
- */

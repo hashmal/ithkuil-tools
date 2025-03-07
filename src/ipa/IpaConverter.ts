@@ -1,5 +1,5 @@
 import { CONVERTION_RULES, IpaConverterMatcher, MatcherContext } from './ipa-conversion-rules'
-import { STRESSED_VOWELS, StressedVowel, VOWELS_STRING } from '../phonology'
+import { STRESSED_VOWELS, StressedVowel, VOWELS } from '../phonology'
 import { IpaConversionError } from './IpaConversionError'
 import { romanizedIthkuilToSyllableBoundaries } from 'syllables/romanizedIthkuilToSyllableBoundaries'
 
@@ -187,7 +187,7 @@ export class IpaConverter {
   protected unstressCharacter(character: string): { character: string, stressed: boolean } {
     const index = STRESSED_VOWELS.indexOf(character as StressedVowel)
     if (index < 0) return { character, stressed: false }
-    return { character: VOWELS_STRING[index], stressed: true }
+    return { character: VOWELS[index], stressed: true }
   }
 
   /** Preprocess a given text for IPA conversion.
