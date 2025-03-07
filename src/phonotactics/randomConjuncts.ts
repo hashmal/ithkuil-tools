@@ -6,19 +6,19 @@ import pentaConsonantalConjuncts from 'phonotactics/pentaConsonantalConjuncts.js
 import random from 'random'
 import { match, P } from 'ts-pattern'
 
-type RandomConjunctOptions = {
+type randomConsonantConjunctOptions = {
   characterCount?: number,
   characterCountRange?: [number, number],
 }
 
-const DEFAULT_OPTIONS: RandomConjunctOptions = { characterCountRange: [2, 5] }
+const DEFAULT_OPTIONS: randomConsonantConjunctOptions = { characterCountRange: [2, 5] }
 
-/** Generate a random phonotactically valid consonantal conjunct.
+/** Generate a random phonotactically valid consonant conjunct.
  *
  * @param options An object specifying the number of consonants in the conjunct.
  * @returns A random phonotactically valid consonantal conjunct.
  */
-export function randomConjunct(options?: RandomConjunctOptions): string {
+export function randomConsonantConjunct(options?: randomConsonantConjunctOptions): string {
   const localOptions = { ...DEFAULT_OPTIONS, ...options }
 
   const characterCount = selectCharacterCount(localOptions)
@@ -48,7 +48,7 @@ function pickCharacter(characters: string): string {
 
 /** Select the number of characters in the conjunct.
  * @internal */
-function selectCharacterCount(options: RandomConjunctOptions): number {
+function selectCharacterCount(options: randomConsonantConjunctOptions): number {
   return match(options)
     .with({ characterCount: P.number }, ({ characterCount }) =>
       characterCount)
