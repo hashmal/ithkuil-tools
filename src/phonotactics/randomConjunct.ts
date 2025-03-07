@@ -13,6 +13,11 @@ type RandomConjunctOptions = {
 
 const DEFAULT_OPTIONS: RandomConjunctOptions = { characterCountRange: [2, 5] }
 
+/** Generate a random phonotactically valid consonantal conjunct.
+ *
+ * @param options An object specifying the number of consonants in the conjunct.
+ * @returns A random phonotactically valid consonantal conjunct.
+ */
 export function randomConjunct(options?: RandomConjunctOptions): string {
   const localOptions = { ...DEFAULT_OPTIONS, ...options }
 
@@ -23,18 +28,26 @@ export function randomConjunct(options?: RandomConjunctOptions): string {
   return row.map((column) => pickCharacter(column)).join('')
 }
 
+/** Select a random integer between 0 and `max` (exclusive).
+ * @internal */
 function rand(max: number): number {
   return random.int(0, max - 1)
 }
 
+/** Pick a random row from a table of conjuncts.
+ * @internal */
 function pickRow(conjuncts: string[][]): string[] {
   return conjuncts[rand(conjuncts.length)]
 }
 
+/** Pick a random character from a string.
+ * @internal */
 function pickCharacter(characters: string): string {
   return characters[rand(characters.length)]
 }
 
+/** Select the number of characters in the conjunct.
+ * @internal */
 function selectCharacterCount(options: RandomConjunctOptions): number {
   return match(options)
     .with({ characterCount: P.number }, ({ characterCount }) =>
@@ -46,6 +59,8 @@ function selectCharacterCount(options: RandomConjunctOptions): number {
     })
 }
 
+/** Select the table of conjuncts based on the number of characters.
+ * @internal */
 function selectConjuncts(characterCount: number): string[][] {
   return match(characterCount)
     .with(2, () => biConsonantalConjuncts.biConsonantalConjuncts)

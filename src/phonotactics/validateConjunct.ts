@@ -5,6 +5,12 @@ import pentaConsonantalConjuncts from 'phonotactics/pentaConsonantalConjuncts.js
 
 import { match } from 'ts-pattern'
 
+/** Check if a consonantal conjunct is phonotactically valid.
+ *
+ * @param consonants A string of 2 to 5 consonants.
+ * @returns `true` if the conjunct is valid, `false` otherwise.
+ * @throws An error if the number of consonants is not between 2 and 5.
+ */
 export function validateConjunct(consonants: string): boolean {
   return match(consonants.length)
     .with(2, () => validateBiConsonantalConjunct(consonants))
@@ -16,6 +22,13 @@ export function validateConjunct(consonants: string): boolean {
     })
 }
 
+/** Validate bi-consonantal conjuncts.
+ *
+ * @param consonants A string of 2 consonants.
+ * @returns `true` if the conjunct is valid, `false` otherwise.
+ *
+ * @internal
+ */
 function validateBiConsonantalConjunct(consonants: string): boolean {
   const conjuncts = biConsonantalConjuncts.biConsonantalConjuncts
 
@@ -30,6 +43,13 @@ function validateBiConsonantalConjunct(consonants: string): boolean {
   return false
 }
 
+/** Validate tri-consonantal conjuncts.
+ *
+ * @param consonants A string of 3 consonants.
+ * @returns `true` if the conjunct is valid, `false` otherwise.
+ *
+ * @internal
+ */
 function validateTriConsonantalConjunct(consonants: string): boolean {
   const conjuncts = triConsonantalConjuncts.triConsonantalConjuncts
 
@@ -45,6 +65,13 @@ function validateTriConsonantalConjunct(consonants: string): boolean {
   return false
 }
 
+/** Validate tetra-consonantal conjuncts.
+ *
+ * @param consonants A string of 4 consonants.
+ * @returns `true` if the conjunct is valid, `false` otherwise.
+ *
+ * @internal
+ */
 function validateTetraConsonantalConjunct(consonants: string): boolean {
   const conjuncts = tetraConsonantalConjuncts.tetraConsonantalConjuncts
 
@@ -61,6 +88,13 @@ function validateTetraConsonantalConjunct(consonants: string): boolean {
   return false
 }
 
+/** Validate penta-consonantal conjuncts.
+ *
+ * @param consonants A string of 5 consonants.
+ * @returns `true` if the conjunct is valid, `false` otherwise.
+ *
+ * @internal
+ */
 function validatePentaConsonantalConjunct(consonants: string): boolean {
   const conjuncts = pentaConsonantalConjuncts.pentaConsonantalConjuncts
 
