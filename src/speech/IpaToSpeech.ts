@@ -6,7 +6,7 @@ type CredentialIdentity = {
   secretAccessKey: string,
 }
 
-type IpaToSpeechOptions = {
+export type IpaToSpeechOptions = {
   languageCode?: string,
   voiceId: string,
   outputFormat: 'mp3' | 'ogg_vorbis',
