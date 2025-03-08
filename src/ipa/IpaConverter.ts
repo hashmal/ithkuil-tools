@@ -7,6 +7,7 @@ export type IpaConverterOptions = {
   stressMarks?: 'accent' | 'line' | 'none',
   brackets?: boolean,
   fullStopsBetweenVowels?: boolean,
+  explicitPenultimateStress?: boolean,
 }
 
 /** Accent to mark stress on an IPA character
@@ -29,6 +30,7 @@ export class IpaConverter {
     stressMarks: 'accent',
     brackets: true,
     fullStopsBetweenVowels: false,
+    explicitPenultimateStress: false,
   }
 
   /** Current options for the converter, based on `DEFAULT_OPTIONS` merged with passed options */
@@ -69,6 +71,9 @@ export class IpaConverter {
       if (this.currentWordIndex > 0) ipaAccumulator += ' '
       const currentSyllableWord = this.syllablesBoundaries[this.currentWordIndex]
       const word = this.words[this.currentWordIndex]
+      const penultimateStress = !this.wordIsStressed(word)
+      const penultimateStressIndex: number | undefined = currentSyllableWord[currentSyllableWord.length - 3]
+
       for (this.index = 0; this.index < word.length; this.index++) {
         const currentCharacter = word[this.index]
         const { character, stressed } = this.unstressCharacter(currentCharacter)
@@ -76,6 +81,12 @@ export class IpaConverter {
           if (this.index > 0 && currentSyllableWord.includes(this.index)) {
             ipaAccumulator += FULLSTOP
           }
+        }
+        if (this.options?.explicitPenultimateStress
+            && this.options?.stressMarks === 'line'
+            && penultimateStress
+            && this.index === penultimateStressIndex) {
+          ipaAccumulator += STRESS_MARK_VERTICAL_LINE
         }
         let matcher
         try { matcher = this.lookupCharacterMatcher(character) }
@@ -188,6 +199,15 @@ export class IpaConverter {
     const index = STRESSED_VOWELS.indexOf(character as StressedVowel)
     if (index < 0) return { character, stressed: false }
     return { character: VOWELS[index], stressed: true }
+  }
+
+  private wordIsStressed(word: string): boolean {
+    for (this.index = 0; this.index < word.length; this.index++) {
+      const currentCharacter = word[this.index]
+      const { stressed } = this.unstressCharacter(currentCharacter)
+      if (stressed) return true
+    }
+    return false
   }
 
   /** Preprocess a given text for IPA conversion.
