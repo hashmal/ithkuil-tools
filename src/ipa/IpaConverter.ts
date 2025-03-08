@@ -3,17 +3,25 @@ import { STRESSED_VOWELS, StressedVowel, VOWELS } from '../phonology'
 import { IpaConversionError } from './IpaConversionError'
 import { romanizedIthkuilToSyllableBoundaries } from 'syllables/romanizedIthkuilToSyllableBoundaries'
 
+/** Options for the IpaConverter class. */
 export type IpaConverterOptions = {
+  /** The type of stress marks to use.
+   * @default 'accent' */
   stressMarks?: 'accent' | 'line' | 'none',
+
+  /** Surround the IPA output with brackets when set to true.
+   * @default true */
   brackets?: boolean,
+
+  /** Insert full stops between vowels when set to true.
+   * @default false */
   fullStopsBetweenVowels?: boolean,
+
+  /** Explicitly mark the penultimate syllable for stress when set to true.
+   * @default false */
   explicitPenultimateStress?: boolean,
 }
 
-/** Accent to mark stress on an IPA character
- *
- * @remarks The representation of the stress mark is a combining acute accent, which means normalizing the string will be necessary to obtain in a single character.
- */
 const STRESS_MARK_ACCENT = '\u0301'
 const STRESS_MARK_VERTICAL_LINE = 'ˈ'
 const FULLSTOP = '.'
@@ -26,7 +34,7 @@ export class IpaConverter {
   // TODO: Implement stress marks as vertical lines.
 
   /** Options for the conversion. */
-  protected options: IpaConverterOptions = {
+  public readonly options: IpaConverterOptions = {
     stressMarks: 'accent',
     brackets: true,
     fullStopsBetweenVowels: false,
@@ -34,7 +42,7 @@ export class IpaConverter {
   }
 
   /** Romanized Ithkuil text to be converted to IPA */
-  private text!: string
+  public readonly text!: string
   private words!: string[]
   private syllablesBoundaries!: number[][]
 
@@ -64,25 +72,28 @@ export class IpaConverter {
     let ipaAccumulator: string = ''
 
     for (this.currentWordIndex = 0; this.currentWordIndex < this.words.length; this.currentWordIndex++) {
-      if (this.currentWordIndex > 0) ipaAccumulator += ' '
+
+      // Current word information
       const currentSyllableWord = this.syllablesBoundaries[this.currentWordIndex]
       const word = this.words[this.currentWordIndex]
+
+      // Stress position
       const penultimateStress = !this.wordIsStressed(word)
-      let stressLineIndex: number
-      if (penultimateStress) {
-        stressLineIndex = currentSyllableWord[currentSyllableWord.length - 3]
-      } else {
-        stressLineIndex = currentSyllableWord[currentSyllableWord.length - 2]
-      }
+      const stressOffset = penultimateStress ? 3 : 2
+      const stressLineIndex = currentSyllableWord[currentSyllableWord.length - stressOffset]
+
+      if (this.currentWordIndex > 0) ipaAccumulator += ' '
 
       for (this.index = 0; this.index < word.length; this.index++) {
-        const currentCharacter = word[this.index]
-        const { character, stressed } = this.unstressCharacter(currentCharacter)
+
+        // Insert full stops between vowels
         if (this.options?.fullStopsBetweenVowels === true) {
           if (this.index > 0 && currentSyllableWord.includes(this.index)) {
             ipaAccumulator += FULLSTOP
           }
         }
+
+        // Insert 'line' stress marks
         if (this.options?.explicitPenultimateStress
             && this.options?.stressMarks === 'line'
             && penultimateStress
@@ -92,6 +103,12 @@ export class IpaConverter {
         if (this.options?.stressMarks === 'line' && !penultimateStress && this.index === stressLineIndex) {
           ipaAccumulator += STRESS_MARK_VERTICAL_LINE
         }
+
+        // Current character information
+        const currentCharacter = word[this.index]
+        const { character, stressed } = this.unstressCharacter(currentCharacter)
+
+        // Lookup IPA transformation matcher
         let matcher
         try { matcher = this.lookupCharacterMatcher(character) }
         catch (error) {
@@ -99,17 +116,22 @@ export class IpaConverter {
           else throw error
         }
 
+        // Apply transformation matcher
         try {
           ipaAccumulator += this.matchCharacter(matcher!)
-          if (this.options?.stressMarks === 'accent' && stressed)
-            ipaAccumulator += STRESS_MARK_ACCENT
         } catch (error) {
           if (error instanceof IpaConversionError) return error
           else throw error
         }
+
+        // Insert 'accent' stress marks
+        if (this.options?.stressMarks === 'accent' && stressed)
+          ipaAccumulator += STRESS_MARK_ACCENT
+
         this.totalIndex++
       }
-      this.totalIndex++
+
+      this.totalIndex++ // Accounts for the space between words
     }
 
     const ipa = this.geminate(ipaAccumulator).normalize()
@@ -154,7 +176,9 @@ export class IpaConverter {
     return this.options.brackets ? `[${ipa}]` : ipa
   }
 
-  context(): MatcherContext {
+  /** Build a context object to pass to a transformation matched
+   * @internal */
+  private context(): MatcherContext {
     return {
       lb: this.lookBehind(),
       la: this.lookAhead(),
@@ -165,13 +189,13 @@ export class IpaConverter {
 
   /** Build a lookahead closure for a matcher.
    * @internal */
-  protected lookAhead(): (length: number) => string {
+  private lookAhead(): (length: number) => string {
     return (length) => (this.text.slice(this.totalIndex + 1, this.totalIndex + 1 + length))
   }
 
   /** Build a lookbehind closure for a matcher.
    * @internal */
-  protected lookBehind(): (length: number) => string {
+  private lookBehind(): (length: number) => string {
     return (length) => (this.text.slice(this.totalIndex - length, this.totalIndex))
   }
 
@@ -188,7 +212,7 @@ export class IpaConverter {
   * @param ipa The IPA string to geminate consonants in.
   * @returns The IPA string with geminated consonants.
   */
-  protected geminate(ipa: string): string {
+  private geminate(ipa: string): string {
     const geminated = ipa
       .replace(/(.)(?<!\1.)\1(?!\1)/g, '$1ː') // Geminate consonants
       .replace(/ɹɾ/g, 'ʀ') // [ɹ] / [ɾ] becomes a trill [r] when geminated, as in Spanish or Italian caro and carro;
@@ -202,7 +226,7 @@ export class IpaConverter {
   * @param character The character to get the unstressed vowel from.
   * @returns An object containing the characater and a boolean indicating if it was originally a stressed vowel.
   */
-  protected unstressCharacter(character: string): { character: string, stressed: boolean } {
+  private unstressCharacter(character: string): { character: string, stressed: boolean } {
     const index = STRESSED_VOWELS.indexOf(character as StressedVowel)
     if (index < 0) return { character, stressed: false }
     return { character: VOWELS[index], stressed: true }
@@ -229,7 +253,7 @@ export class IpaConverter {
   * @param text The text to preprocess.
   * @returns The preprocessed text.
   */
-  protected preprocessText(text: string): string {
+  private preprocessText(text: string): string {
     return text
       .toLowerCase() // Make everything lowercase
       .replace(/\.|,/g, ' ') // Remove punctuation
