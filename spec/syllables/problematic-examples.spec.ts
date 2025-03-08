@@ -15,6 +15,9 @@ describe.skip.each([
   ['warra', 'wa-rra'], // [wa-rra] instead of [wa-rra]']
   ['amfspa', 'am-fspa'], // [amfs-pa] instead of [amf-spa]
   // ['alpšška', 'alpšš-ka'], // [alpšš-ka] instead of [alp-šška]
+
+  ['arrlalu', 'arrlalu'],
+  ['epssaloʼë', 'epssaloʼë'],
 ])('%s', (word: string, syllables: string) => {
   it(`resolves to ${syllables}`, () => {
     expect(romanizedIthkuilToSyllables(word)).toEqual(split(syllables))
