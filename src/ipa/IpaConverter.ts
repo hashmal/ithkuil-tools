@@ -89,7 +89,7 @@ export class IpaConverter {
             && this.index === stressLineIndex) {
           ipaAccumulator += STRESS_MARK_VERTICAL_LINE
         }
-        if (this.options?.stressMarks === 'line' && this.index === stressLineIndex) {
+        if (this.options?.stressMarks === 'line' && !penultimateStress && this.index === stressLineIndex) {
           ipaAccumulator += STRESS_MARK_VERTICAL_LINE
         }
         let matcher
