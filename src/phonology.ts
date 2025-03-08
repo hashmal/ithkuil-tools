@@ -31,7 +31,7 @@ export const BETWEEN_VOWELS_GEMINABLES = [
 ] as const
 export type BetweenVowelsGeminable = typeof BETWEEN_VOWELS_GEMINABLES[number]
 
-export const CONTINUANT_GEMINABLES = ['ç', 'ḑ', 'f', 'h', 'l', 'ļ', 'm', 'n', 'ň', 'ř', 's', 'š', 'ţ', 'v', 'x', 'z', 'ž'] as const // add 'r'?
+export const CONTINUANT_GEMINABLES = ['ç', 'ḑ', 'f', 'h', 'l', 'ļ', 'm', 'n', 'ň', 'r', 'ř', 's', 'š', 'ţ', 'v', 'x', 'z', 'ž'] as const // add 'r'?
 export type ContinuantGeminable = typeof CONTINUANT_GEMINABLES[number]
 
 export const STOPS_GEMINABLES = ['b', 'd', 'g', 'k', 'p', 't'] as const
@@ -42,6 +42,9 @@ export type StopGeminable = typeof STOPS_GEMINABLES[number]
 
 export const STOPS = ['p', 'b', 't', 'd', 'k', 'g', 'ʼ'] as const
 export type Stop = typeof STOPS[number]
+
+export const GLOTTAL_STOPS = ['ʼ'] as const
+export type GlottalStop = typeof GLOTTAL_STOPS[number]
 
 export const FRICATIVES = ['f', 'v', 'ţ', 'ḑ', 's', 'z', 'š', 'ž', 'ç', 'x', 'h', 'ļ'] as const
 export type Fricative = typeof FRICATIVES[number]
@@ -65,6 +68,7 @@ export const APPROXIMANTS = ['w', 'y', 'ř', 'l'] as const
 export type Approximant = typeof APPROXIMANTS[number]
 
 export enum ConsonantCategory {
+  GlottalStop = 6.6,
   Stop = 6,
   Affricate = 5,
   LabiodentalFricative = 4.8,
@@ -91,6 +95,8 @@ export enum ConsonantCategory {
  */
 export function getConsonantCategory(letter: string): ConsonantCategory | 0 {
   return match(letter)
+    .with(P.string.regex(new RegExp(`[${GLOTTAL_STOPS.join()}]`)),
+      () => ConsonantCategory.GlottalStop)
     .with(P.string.regex(new RegExp(`[${STOPS.join()}]`)),
       () => ConsonantCategory.Stop)
     .with(P.string.regex(new RegExp(`[${AFFRICATES.join()}]`)),

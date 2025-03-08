@@ -49,8 +49,8 @@ describe.each([
 describe.each([
   ['odda', 'od-da'],
   ['arppa', 'arp-pa'],
-  ['ampda', 'am-pda'],
-  ['aizxra', 'ai-zxra'],
+  ['ampda', 'amp-da'],
+  ['aizxra', 'aiz-xra'],
   ['ezvwau', 'ez-vwau'],
 ])('[TRI] %s', (word: string, syllables: string) => {
   it(`resolves to ${syllables}`, () => {
@@ -70,7 +70,7 @@ describe.each([
 describe.each([
   ['alpsbwa', 'al-psbwa'],
   ['ařvzkfa', 'ař-vzkfa'],
-  ['ařnsţla', 'ařn-sţla'],
+  ['ařnsţla', 'ařns-ţla'],
 ])('[PENTA] %s', (word: string, syllables: string) => {
   it(`resolves to ${syllables}`, () => {
     expect(romanizedIthkuilToSyllables(word)).toEqual(split(syllables))

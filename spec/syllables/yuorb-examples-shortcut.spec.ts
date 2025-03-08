@@ -2,8 +2,8 @@ import { romanizedIthkuilToSyllables } from '../../src/syllables/romanizedIthkui
 import { split } from '../helpers'
 
 describe.each([
-  ['yedpéi mmoi', 'ye-dpéi mmoi'],
-  ['edpadéi mmoi', 'e-dpa-déi mmoi'],
+  ['yedpéi mmoi', 'yed-péi mmoi'],
+  ['edpadéi mmoi', 'ed-pa-déi mmoi'],
   ['weinţdâ', 'weinţ-dâ'],
   ['enţdarâ', 'enţ-da-râ'],
 ])('%s', (word: string, syllables: string) => {

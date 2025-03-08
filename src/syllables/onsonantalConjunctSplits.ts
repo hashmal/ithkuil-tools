@@ -10,7 +10,8 @@ export function biConsonantalConjunctSplit(consonants: string): number {
 
   // Geminable continuants
   const continuantGemiinationSplit = geminatedContinuant(consonants)
-  if (continuantGemiinationSplit) return continuantGemiinationSplit
+  if (continuantGemiinationSplit) return continuantGemiinationSplit - 2
+  // NOTE: bi-consonantal conjuncts consisting of a gemination splits the syllable before the geminated consonant
 
   // General rules
   return checkConsonantStrengthRecursively(consonants)
@@ -22,6 +23,10 @@ export function triConsonantalConjunctSplit(consonants: string): number {
   if (stopGeminationsSplit) return stopGeminationsSplit
 
   // NOTE: tri-consonantal conjuncts should not need rules for continuant geminables
+  // NOTE: previous note may reveal itself to be incorrect
+  // Geminable continuants
+  const continuantGemiinationSplit = geminatedContinuant(consonants)
+  if (continuantGemiinationSplit) return continuantGemiinationSplit
 
   // General rules
   return checkConsonantStrengthRecursively(consonants)
@@ -45,9 +50,9 @@ export function pentaConsonantalConjunctSplit(consonants: string): number {
   const stopGeminationsSplit = geminatedStop(consonants)
   if (stopGeminationsSplit) return stopGeminationsSplit
 
-  // Geminable continuants
-  const continuantGemiinationSplit = geminatedContinuant(consonants)
-  if (continuantGemiinationSplit) return continuantGemiinationSplit
+  // // Geminable continuants
+  // const continuantGemiinationSplit = geminatedContinuant(consonants)
+  // if (continuantGemiinationSplit) return continuantGemiinationSplit
 
   // General rules
   return checkConsonantStrengthRecursively(consonants)
@@ -58,7 +63,7 @@ function checkConsonantStrengthRecursively(consonants: string, index=0): number 
 
   if (getCsCategory(consonants[index]) > getCsCategory(consonants[index + 1])) {
     return index
-  } else if (getCsCategory(consonants[index]) < getCsCategory(consonants[index + 1])) {
+  } else if (getCsCategory(consonants[index]) <= getCsCategory(consonants[index + 1])) {
     if (index === consonants.length - 1) {
       return index - 1
     } else {

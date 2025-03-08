@@ -5,7 +5,7 @@ describe.each([
   ['rrala', 'rra-la'],
   ['rrasa', 'rra-sa'],
   ['rraca', 'rra-ca'],
-  ['rraţsa', 'rra-ţsa'],
+  ['rraţsa', 'rraţ-sa'],
   ['rrata', 'rra-ta'],
   ['rraţa', 'rra-ţa'],
   ['rraza', 'rra-za'],
