@@ -50,7 +50,7 @@ describe.each([
   ['odda', 'od-da'],
   ['arppa', 'arp-pa'],
   ['ampda', 'amp-da'],
-  ['aizxra', 'aiz-xra'],
+  ['aizxra', 'ai-zxra'],
   ['ezvwau', 'ez-vwau'],
 ])('[TRI] %s', (word: string, syllables: string) => {
   it(`resolves to ${syllables}`, () => {
