@@ -1,9 +1,9 @@
 import { SyllableSplitter } from './SyllableSplitter'
 
-/** Convert a Romanized Ithkuil word to an array of syllables
+/** Convert a romanized Ithkuil text to an array of syllables
  *
- * @param {string} romanizedIthkuilWord - Romanized Ithkuil word
- * @returns {string[]} Array of syllables
+ * @param {string} romanizedIthkuilText - Romanized Ithkuil text
+ * @returns {string[][]} Array of array of syllables
  */
 export function romanizedIthkuilToSyllables(romanizedIthkuilText: string): string[][] {
   const boundaries = []
