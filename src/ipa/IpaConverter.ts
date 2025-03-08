@@ -25,16 +25,13 @@ const FULLSTOP = '.'
 export class IpaConverter {
   // TODO: Implement stress marks as vertical lines.
 
-  /** Default options for the converter, to be overwwritten with explicitly given options. */
-  protected DEFAULT_OPTIONS: IpaConverterOptions = {
+  /** Options for the conversion. */
+  protected options: IpaConverterOptions = {
     stressMarks: 'accent',
     brackets: true,
     fullStopsBetweenVowels: false,
     explicitPenultimateStress: false,
   }
-
-  /** Current options for the converter, based on `DEFAULT_OPTIONS` merged with passed options */
-  protected options!: IpaConverterOptions
 
   /** Romanized Ithkuil text to be converted to IPA */
   private text!: string
@@ -54,10 +51,8 @@ export class IpaConverter {
   constructor(romanizedIthkuilText: string, options?: IpaConverterOptions) {
     this.text = this.preprocessText(romanizedIthkuilText)
     this.words = this.text.split(' ')
-    // console.log(this.text)
     this.syllablesBoundaries = romanizedIthkuilToSyllableBoundaries(this.text)
-    // console.log(this.syllablesBoundaries)
-    this.options = { ...this.DEFAULT_OPTIONS, ...(options ?? {}) }
+    this.options = { ...this.options, ...(options ?? {}) }
   }
 
   /** Get an IPA representation of the provided romanized Ithtkuil text (or an error, when appropriate).
@@ -201,6 +196,13 @@ export class IpaConverter {
     return { character: VOWELS[index], stressed: true }
   }
 
+  /** Check if a word is explicitly marked for stress.
+   *
+   * @param word The word to check for stress.
+   * @returns A boolean indicating if the word is explicitly marked for stress.
+   *
+   * @internal
+   */
   private wordIsStressed(word: string): boolean {
     for (this.index = 0; this.index < word.length; this.index++) {
       const currentCharacter = word[this.index]
