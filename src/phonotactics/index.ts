@@ -1,2 +1,2 @@
-export { randomConsonantConjunct } from 'phonotactics/randomConjuncts'
+export { randomConsonantConjunct, randomVowelConjunct } from 'phonotactics/randomConjuncts'
 export { validateConjunct } from 'phonotactics/validateConjunct'

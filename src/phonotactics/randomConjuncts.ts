@@ -5,27 +5,48 @@ import pentaConsonantalConjuncts from 'phonotactics/pentaConsonantalConjuncts.js
 
 import random from 'random'
 import { match, P } from 'ts-pattern'
+import { VOWELS } from 'src/phonology'
 
-type randomConsonantConjunctOptions = {
+type RandomConjunctOptions = {
   characterCount?: number,
   characterCountRange?: [number, number],
 }
 
-const DEFAULT_OPTIONS: randomConsonantConjunctOptions = { characterCountRange: [2, 5] }
+const DEFAULT_CONSONANT_OPTIONS: RandomConjunctOptions = { characterCountRange: [2, 5] }
+
+const DEFAULT_VOWEL_OPTIONS: RandomConjunctOptions = { characterCountRange: [1, 2] }
 
 /** Generate a random phonotactically valid consonant conjunct.
  *
  * @param options An object specifying the number of consonants in the conjunct.
  * @returns A random phonotactically valid consonantal conjunct.
  */
-export function randomConsonantConjunct(options?: randomConsonantConjunctOptions): string {
-  const localOptions = { ...DEFAULT_OPTIONS, ...options }
+export function randomConsonantConjunct(options?: RandomConjunctOptions): string {
+  const localOptions = { ...DEFAULT_CONSONANT_OPTIONS, ...options }
 
   const characterCount = selectCharacterCount(localOptions)
   const conjuncts = selectConjuncts(characterCount)
 
   const row = pickRow(conjuncts)
   return row.map((column) => pickCharacter(column)).join('')
+}
+
+export function randomVowelConjunct(options?: RandomConjunctOptions): string {
+  const localOptions = { ...DEFAULT_VOWEL_OPTIONS, ...options }
+
+  const characterCount = selectCharacterCount(localOptions)
+
+  return match(characterCount)
+    .with(1, () => VOWELS[rand(VOWELS.length)])
+    .with(2, () => {
+      const rand0 = rand(VOWELS.length)
+      let rand1 = rand0
+      while (rand0 === rand1) rand1 = rand(VOWELS.length)
+      return VOWELS[rand0] + VOWELS[rand1]
+    })
+    .otherwise(() => {
+      throw new Error('Only 1 or 2 vowels are permissible')
+    })
 }
 
 /** Select a random integer between 0 and `max` (exclusive).
@@ -48,7 +69,7 @@ function pickCharacter(characters: string): string {
 
 /** Select the number of characters in the conjunct.
  * @internal */
-function selectCharacterCount(options: randomConsonantConjunctOptions): number {
+function selectCharacterCount(options: RandomConjunctOptions): number {
   return match(options)
     .with({ characterCount: P.number }, ({ characterCount }) =>
       characterCount)
