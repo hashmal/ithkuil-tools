@@ -42,6 +42,7 @@ export class IpaConverter {
    * @internal */
   private index = 0
   private currentWordIndex = 0
+  private totalIndex = 0
 
   /** Constructor
    *
@@ -106,7 +107,9 @@ export class IpaConverter {
           if (error instanceof IpaConversionError) return error
           else throw error
         }
+        this.totalIndex++
       }
+      this.totalIndex++
     }
 
     const ipa = this.geminate(ipaAccumulator).normalize()
@@ -156,20 +159,20 @@ export class IpaConverter {
       lb: this.lookBehind(),
       la: this.lookAhead(),
       syllablesBoundaries: this.syllablesBoundaries[this.currentWordIndex],
-      currentIndex: this.index,
+      currentIndex: this.totalIndex,
     }
   }
 
   /** Build a lookahead closure for a matcher.
    * @internal */
   protected lookAhead(): (length: number) => string {
-    return (length) => (this.text.slice(this.index + 1, this.index + 1 + length))
+    return (length) => (this.text.slice(this.totalIndex + 1, this.totalIndex + 1 + length))
   }
 
   /** Build a lookbehind closure for a matcher.
    * @internal */
   protected lookBehind(): (length: number) => string {
-    return (length) => (this.text.slice(this.index - length, this.index))
+    return (length) => (this.text.slice(this.totalIndex - length, this.totalIndex))
   }
 
   /** Format a human-readable view of where the conversion has failed.
