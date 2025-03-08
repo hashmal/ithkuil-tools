@@ -19,6 +19,14 @@ describe('IpaConverterOptions', () => {
       expect(converter.textToIpa()).toBe('[á]')
     })
 
+    it('returns the IPA string with stress line if set to "line"', () => {
+      const converter1 = new IpaConverter('á', { stressMarks: 'line' })
+      expect(converter1.textToIpa()).toBe('[ˈa]')
+
+      const converter2 = new IpaConverter('abá', { stressMarks: 'line' })
+      expect(converter2.textToIpa()).toBe('[aˈba]')
+    })
+
     it('returns the IPA string without stress diactrics if set to "none"', () => {
       const converter = new IpaConverter('á', { stressMarks: 'none' })
       expect(converter.textToIpa()).toBe('[a]')

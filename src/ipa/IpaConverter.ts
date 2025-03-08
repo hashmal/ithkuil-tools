@@ -67,7 +67,12 @@ export class IpaConverter {
       const currentSyllableWord = this.syllablesBoundaries[this.currentWordIndex]
       const word = this.words[this.currentWordIndex]
       const penultimateStress = !this.wordIsStressed(word)
-      const penultimateStressIndex: number | undefined = currentSyllableWord[currentSyllableWord.length - 3]
+      let stressLineIndex: number
+      if (penultimateStress) {
+        stressLineIndex = currentSyllableWord[currentSyllableWord.length - 3]
+      } else {
+        stressLineIndex = currentSyllableWord[currentSyllableWord.length - 2]
+      }
 
       for (this.index = 0; this.index < word.length; this.index++) {
         const currentCharacter = word[this.index]
@@ -80,23 +85,27 @@ export class IpaConverter {
         if (this.options?.explicitPenultimateStress
             && this.options?.stressMarks === 'line'
             && penultimateStress
-            && this.index === penultimateStressIndex) {
+            && this.index === stressLineIndex) {
+          ipaAccumulator += STRESS_MARK_VERTICAL_LINE
+        }
+        if (this.options?.stressMarks === 'line' && this.index === stressLineIndex) {
           ipaAccumulator += STRESS_MARK_VERTICAL_LINE
         }
         let matcher
         try { matcher = this.lookupCharacterMatcher(character) }
-        catch (error) { if (error instanceof Error) return error }
+        catch (error) {
+          if (error instanceof IpaConversionError) return error
+          else throw error
+        }
 
         try {
           ipaAccumulator += this.matchCharacter(matcher!)
-          if (this.options?.stressMarks === 'accent' && stressed) ipaAccumulator += STRESS_MARK_ACCENT
-          if (this.options?.stressMarks === 'line' && stressed) {
-            const dotMatch = ipaAccumulator.match(/\.[^.]*$/)
-            if (dotMatch) {
-              ipaAccumulator = ipaAccumulator.slice(0, dotMatch!.index!+1) + STRESS_MARK_VERTICAL_LINE + ipaAccumulator.slice(dotMatch!.index!+1)
-            }
-          }
-        } catch (error) { if (error instanceof Error) return error }
+          if (this.options?.stressMarks === 'accent' && stressed)
+            ipaAccumulator += STRESS_MARK_ACCENT
+        } catch (error) {
+          if (error instanceof IpaConversionError) return error
+          else throw error
+        }
       }
     }
 
