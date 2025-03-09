@@ -6,18 +6,14 @@ import { split } from '../helpers'
  * Fully commented specs are considered solved.
  */
 describe.skip.each([
-  ['uẓfäl', 'u-ẓfäl'], // [u.dzfæl̪] instead of [udz.fæl̪]
   // ['wezvwauš', 'wez-vwauš'], // [wɛ.zvwauʃ] instead of [wɛz.vwauʃ]
   // ['wezçauš', 'wez-çauš'], // [wɛ.zçauʃ] instead of [wɛz.çauʃ]
   // ['epssaloʼë', 'e-pssa-lo-ʼë'], // [epss-a-lo-ʼë] instead of [e-pssa-lo-ʼë]
   // ['opsspa', 'opss-pa'], // [o-psspa] instead of [opss-pa]
-  ['wassa', 'wa-ssa'], // [wa-ssa] instead of [wa-ssa]']
-  ['warra', 'wa-rra'], // [wa-rra] instead of [wa-rra]']
   ['amfspa', 'am-fspa'], // [amfs-pa] instead of [amf-spa]
   // ['alpšška', 'alpšš-ka'], // [alpšš-ka] instead of [alp-šška]
-
-  ['arrlalu', 'arrlalu'],
-  ['epssaloʼë', 'epssaloʼë'],
+  // ['epssaloʼë', 'epssa-lo-ʼë'], // [epss-a-lo-ʼë] instead of [e-pssa-lo-ʼë]
+  // ['wellyawá urwaleʼö', 'we-llya-wá u-rwa-le-ʼö'],
 ])('%s', (word: string, syllables: string) => {
   it(`resolves to ${syllables}`, () => {
     expect(romanizedIthkuilToSyllables(word)).toEqual(split(syllables))

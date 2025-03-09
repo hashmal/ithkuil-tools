@@ -22,11 +22,12 @@ export function triConsonantalConjunctSplit(consonants: string): number {
   const stopGeminationsSplit = geminatedStop(consonants)
   if (stopGeminationsSplit) return stopGeminationsSplit
 
-  // NOTE: tri-consonantal conjuncts should not need rules for continuant geminables
-  // NOTE: previous note may reveal itself to be incorrect
   // Geminable continuants
-  const continuantGemiinationSplit = geminatedContinuant(consonants)
-  if (continuantGemiinationSplit) return continuantGemiinationSplit
+  const continuantGemiinationIndex = geminatedContinuantIndex(consonants)
+  if (continuantGemiinationIndex === 0) {
+    const continuantGemiinationSplit = geminatedContinuant(consonants)
+    if (continuantGemiinationSplit) return continuantGemiinationSplit
+  }
 
   // General rules
   return checkConsonantStrengthRecursively(consonants)
@@ -84,4 +85,10 @@ function geminatedContinuant(consonants: string): number | undefined {
   const geminatedContinuant = new RegExp(`([${CONTINUANT_GEMINABLES.join('')}])\\1`)
   const geminatedContinuantMatch = consonants.match(geminatedContinuant)
   if (geminatedContinuantMatch) return geminatedContinuantMatch.index! + 2
+}
+
+function geminatedContinuantIndex(consonants: string): number | undefined {
+  const geminatedContinuant = new RegExp(`([${CONTINUANT_GEMINABLES.join('')}])\\1`)
+  const geminatedContinuantMatch = consonants.match(geminatedContinuant)
+  if (geminatedContinuantMatch) return geminatedContinuantMatch.index!
 }

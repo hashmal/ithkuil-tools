@@ -70,7 +70,7 @@ describe.each([
   ['wucpirwaʼo', 'wuc-pi-rwa-ʼo'],
   ['elesa kšilaʼö', 'e-le-sa kši-la-ʼö'],
   ['řeseʼo yeirčá kšivo wiole', 'ře-se-ʼo yeir-čá kši-vo wi-o-le'],
-  ['wellyawá urwaleʼö', 'we-llya-wá u-rwa-le-ʼö'],
+  ['wellyawá urwaleʼö', 'well-ya-wá u-rwa-le-ʼö'],
   ['epssaloʼë', 'e-pssa-lo-ʼë'],
   ['wucpirwoʼë', 'wuc-pi-rwo-ʼë'],
   ['ujthädöʼe', 'uj-thä-dö-ʼe'],
