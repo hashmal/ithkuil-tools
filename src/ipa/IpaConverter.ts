@@ -1,5 +1,5 @@
 import { CONVERTION_RULES, IpaConverterMatcher, MatcherContext } from './ipa-conversion-rules'
-import { STRESSED_VOWELS, StressedVowel, VOWELS } from '../phonology'
+import { STRESSED_VOWELS, StressedVowel, Vowel, VOWELS } from '../phonology'
 import { IpaConversionError } from './IpaConversionError'
 import { romanizedIthkuilToSyllableBoundaries } from 'syllables/romanizedIthkuilToSyllableBoundaries'
 
@@ -20,6 +20,10 @@ export type IpaConverterOptions = {
   /** Explicitly mark the penultimate syllable for stress when set to true.
    * @default false */
   explicitPenultimateStress?: boolean,
+
+  /** If set to true, insert a glottal stop at the beginning of a word starting with a vowel.
+   * @default false */
+  wordInitialGlottalStop?: boolean,
 }
 
 const STRESS_MARK_ACCENT = '\u0301'
@@ -39,6 +43,7 @@ export class IpaConverter {
     brackets: true,
     fullStopsBetweenVowels: false,
     explicitPenultimateStress: false,
+    wordInitialGlottalStop: false,
   }
 
   /** Romanized Ithkuil text to be converted to IPA */
@@ -83,6 +88,13 @@ export class IpaConverter {
       const stressLineIndex = currentSyllableWord[currentSyllableWord.length - stressOffset]
 
       if (this.currentWordIndex > 0) ipaAccumulator += ' '
+
+      // Glottal stop insertion
+      if (this.options.wordInitialGlottalStop) {
+        const { character } = this.unstressCharacter(word[0])
+        if (VOWELS.includes(character as Vowel))
+          ipaAccumulator += 'ʔ'
+      }
 
       for (this.index = 0; this.index < word.length; this.index++) {
 
