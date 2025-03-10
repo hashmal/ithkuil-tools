@@ -273,5 +273,12 @@ export class IpaConverter {
       .replace(/^\s+/, '') // Remove leading spaces
       .replace(/\s+$/, '') // Remove trailing spaces
       .replace(/'/, 'ʼ') // Replace apostrophes with glottal stops
+      // Normalize orthography:
+      .replace(/[ṭŧ]/g, 'ţ')
+      .replace(/[ḍđ]/g, 'ḑ')
+      .replace(/[ņṇ]/g, 'ň')
+      .replace(/[ŗṛ]/g, 'ř')
+      .replace(/[łḷ]/g, 'ļ')
+      .replace(/ż/g, 'ẓ')
   }
 }
